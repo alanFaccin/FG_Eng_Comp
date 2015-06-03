@@ -13,9 +13,14 @@ public:
     Scenary(QWidget* parent = NULL);
     void draw();
     void define_Scenary(int type);
+    int Colision_Player_tab();
+    int Colision_Player_gray();
+    int Colision_cenario();
+    void movePalyer();
 
     void paintEvent(QPaintEvent* event);
     void keyPressEvent(QKeyEvent* event);
+    void keyReleaseEvent(QKeyEvent *);
     void resizeEvent(QResizeEvent* event);
 private slots:
 

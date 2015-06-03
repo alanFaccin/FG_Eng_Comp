@@ -4,11 +4,21 @@
 #include <QDebug>
 #include <QLabel>
 #include <QKeyEvent>
+#include <QApplication>
+#include <QColor>
+
+#define preto 1
+#define branco 0
+#define cinza -1
+
+bool keyLeft = false,keyRight = false,keyUp = false,keyDown = false;
+bool keyA = false,keyD = false,keyW = false,keyS = false;
 
 
 Scenary::Scenary(QWidget *parent)
 {
     resize(800,600);
+
     this->setFocus();
     _Rows = 12;
     _Col = 20;
@@ -28,7 +38,10 @@ Scenary::Scenary(QWidget *parent)
 
     define_Scenary(1);
 
-    _p1 = new Player(this);
+
+
+    _p1 = new Player(this, Qt::white,700,300);
+    _p2 = new Player(this, Qt::black,100,300);
 }
 
 void Scenary::draw()
@@ -362,6 +375,152 @@ void Scenary::define_Scenary(int type)
 
 }
 
+int Scenary::Colision_Player_tab()
+{
+    //    if(color == preto){
+    //        for(int i=0;i<_Rows;i++){
+    //            for(int j=0;j<_Col;j++){
+
+    //                if(RectColors[i][j]!= branco){
+    //                    if(_p1->getX()== RectPos[i][j].x()||_p1->getY() == RectPos[i][j].y()){
+    //                        return 1;
+    //                        qDebug()<<"colisao";
+    //                    }
+    //                    //                    else if(){
+
+    //                    //                    }
+    //                }
+    //            }
+    //        }
+    //    }
+
+}
+
+int Scenary::Colision_Player_gray()
+{
+    //qDebug()<<"gray";
+    for(int i=0;i<_Rows;i++){
+        for(int j=0;j<_Col;j++){
+
+            if(RectColors[i][j] == cinza){
+                //colisao lado direito do player
+                qDebug()<<"getX()+_p1->getW_size() "<<(_p1->getX()+_p1->getW_size());
+                qDebug()<<"RectPos[i][j].x() "<<RectPos[i][j].x();
+                if(_p1->getX()+_p1->getW_size()>RectPos[i][j].x()){
+
+                    //qDebug()<<"Colidiu";
+                    //_p1->setX(width() - _p1->getW_size());
+                }
+
+            }
+        }
+    }
+}
+
+
+
+int Scenary::Colision_cenario()
+{
+    //player 1
+    //colisao lado direito do cenario
+    if(_p1->getX()+_p1->getW_size()>width()){
+        _p1->setX(width() - _p1->getW_size());
+    }
+    // colisao do parte inferior do cenario
+    if (_p1->getY() + _p1->getH_size() > height())
+    {
+        _p1->setY(height() - _p1->getH_size());
+    }
+    //colisao lado esquerdo do cenario
+    if (_p1->getX() < 0)
+    {
+        _p1->setX(0);
+    }
+    // colisao do parte superior do cenario
+    if (_p1->getY() < 0)
+    {
+        _p1->setY(0);
+    }
+
+    //player 2
+    //colisao lado direito do cenario
+    if(_p2->getX()+_p2->getW_size()>width()){
+        _p2->setX(width() - _p2->getW_size());
+    }
+    // colisao do parte inferior do cenario
+    if (_p2->getY() + _p2->getH_size() > height())
+    {
+        _p2->setY(height() - _p2->getH_size());
+    }
+    //colisao lado esquerdo do cenario
+    if (_p2->getX() < 0)
+    {
+        _p2->setX(0);
+    }
+    // colisao do parte superior do cenario
+    if (_p2->getY() < 0)
+    {
+        _p2->setY(0);
+    }
+
+}
+
+void Scenary::movePalyer()
+{
+    //player 1
+    if (keyLeft && keyUp) {
+        _p1->setX(_p1->getX()-5);
+        _p1->setY(_p1->getY()-5);
+    }
+
+    else if (keyRight && keyUp) {
+        _p1->setX(_p1->getX()+5);
+        _p1->setY(_p1->getY()-5);
+    }
+
+    else if (keyDown && keyLeft) {
+        _p1->setX(_p1->getX()-5);
+        _p1->setY(_p1->getY()+5);
+    }
+
+    else if (keyDown && keyRight) {
+        _p1->setX(_p1->getX()+5);
+        _p1->setY(_p1->getY()+5);
+    }
+
+    if (keyLeft) _p1->setX(_p1->getX()-10);
+    else if (keyRight) _p1->setX(_p1->getX()+10);
+    if (keyDown) _p1->setY(_p1->getY()+10);
+    else if (keyUp)  _p1->setY(_p1->getY()-10);
+
+    //player 2
+    if (keyA && keyW) {
+        _p2->setX(_p2->getX()-5);
+        _p2->setY(_p2->getY()-5);
+    }
+
+    else if (keyD && keyW) {
+        _p2->setX(_p2->getX()+5);
+        _p2->setY(_p2->getY()-5);
+    }
+
+    else if (keyS && keyA) {
+        _p2->setX(_p2->getX()-5);
+        _p2->setY(_p2->getY()+5);
+    }
+
+    else if (keyS && keyD) {
+        _p2->setX(_p2->getX()+5);
+        _p2->setY(_p2->getY()+5);
+    }
+
+    if (keyA) _p2->setX(_p2->getX()-10);
+    else if (keyD) _p2->setX(_p2->getX()+10);
+    if (keyS) _p2->setY(_p2->getY()+10);
+    else if (keyW)  _p2->setY(_p2->getY()-10);
+
+}
+
 void Scenary::paintEvent(QPaintEvent *event)
 {
     QFrame::paintEvent(event);
@@ -393,35 +552,95 @@ void Scenary::paintEvent(QPaintEvent *event)
         _y +=_h_sz;
         _x=0;
     }
+    //draw player
+
+    for(int i=0;i<_Rows;i++){
+        for(int j=0;j<_Col;j++){
+
+            if(RectColors[i][j]==0){
+
+                break;
+            }
+            if(RectColors[i][j]==1){
+                //draw player 2
+            }
+
+        }
+    }
+    this->Colision_cenario();
+    this->Colision_Player_gray();
+
+
     _p1->draw(painter);
+    _p2->draw(painter);
+
 }
 
 void Scenary::keyPressEvent(QKeyEvent *event)
 {
-    QFrame::keyPressEvent(event);
-    qDebug()<<"key event";
-    switch (event->key()) {
-    case Qt::Key_Up:
-        _p1->setX(100);
-        _p1->setY(100);
-        repaint();
-        qDebug()<<"up";
-        break;
-    case Qt::Key_Down:
-        qDebug()<<"down";
-
-        break;
+    // qDebug()<<"aa";
+    switch(event->key()) {
     case Qt::Key_Left:
-        qDebug()<<"left";
-
+        keyLeft = true;
         break;
     case Qt::Key_Right:
-        qDebug()<<"right";
-
+        keyRight = true;
         break;
-    default:
+    case Qt::Key_Up:
+        keyUp = true;
+        break;
+    case Qt::Key_Down:
+        keyDown = true;
+        break;
+    case Qt::Key_A:
+        keyA = true;
+        break;
+    case Qt::Key_D:
+        keyD = true;
+        break;
+    case Qt::Key_W:
+        keyW = true;
+        break;
+    case Qt::Key_S:
+        keyS = true;
         break;
     }
+
+}
+void Scenary::keyReleaseEvent(QKeyEvent *event) {
+
+    if (!event->isAutoRepeat()) {
+        switch(event->key()) {
+        case Qt::Key_Left:
+            keyLeft = false;
+            break;
+        case Qt::Key_Right:
+            keyRight = false;
+            break;
+        case Qt::Key_Up:
+            keyUp = false;
+            break;
+        case Qt::Key_Down:
+            keyDown = false;
+            break;
+        case Qt::Key_A:
+            keyA = false;
+            break;
+        case Qt::Key_D:
+            keyD = false;
+            break;
+        case Qt::Key_W:
+            keyW = false;
+            break;
+        case Qt::Key_S:
+            keyS = false;
+            break;
+        }
+    }
+    // atualiza as coordenadas de movimentação de acordo com as teclas pressionadas
+    movePalyer();
+    //repintar a tela
+    repaint();
 }
 
 void Scenary::resizeEvent(QResizeEvent *event)
@@ -430,8 +649,16 @@ void Scenary::resizeEvent(QResizeEvent *event)
 
     //    //qDebug()<< width();
     //    //qDebug()<< height();
-
+    // atualiza tamanho dos quadrados tabuleiro
     _x = _y = 0;
     _w_sz = width()/_Col;
     _h_sz = height()/_Rows;
+
+    // atualiza tamanho payer
+    _p1->setH_size((height()/12)*0.9);
+    _p1->setW_size((width()/20)*0.9);
+    // qDebug()<<_p1->getH_size()<<_p1->getW_size();
+    //_p1->setw(_p1->getY()-10);
+    // _p1->setY(_p1->getY()-10);
+
 }
