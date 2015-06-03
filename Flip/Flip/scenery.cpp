@@ -1,4 +1,5 @@
 #include "scenery.h"
+#include "player.h"
 #include <QPainter>
 #include <QDebug>
 #include <QLabel>
@@ -8,7 +9,7 @@
 Scenary::Scenary(QWidget *parent)
 {
     resize(800,600);
-
+    this->setFocus();
     _Rows = 12;
     _Col = 20;
 
@@ -26,11 +27,14 @@ Scenary::Scenary(QWidget *parent)
     }
 
     define_Scenary(1);
+
+    _p1 = new Player(this);
 }
 
 void Scenary::draw()
 {
     repaint();
+
 }
 
 void Scenary::define_Scenary(int type)
@@ -383,21 +387,25 @@ void Scenary::paintEvent(QPaintEvent *event)
                 painter.setBrush( Qt::gray );
             }
             painter.drawRect(_x ,_y, _w_sz, _h_sz);
-            qDebug()<< RectPos [i][j];
+            //qDebug()<< RectPos [i][j];
             _x += _w_sz;
         }
         _y +=_h_sz;
         _x=0;
     }
+    _p1->draw(painter);
 }
 
 void Scenary::keyPressEvent(QKeyEvent *event)
 {
     QFrame::keyPressEvent(event);
+    qDebug()<<"key event";
     switch (event->key()) {
     case Qt::Key_Up:
+        _p1->setX(100);
+        _p1->setY(100);
+        repaint();
         qDebug()<<"up";
-
         break;
     case Qt::Key_Down:
         qDebug()<<"down";
@@ -414,7 +422,6 @@ void Scenary::keyPressEvent(QKeyEvent *event)
     default:
         break;
     }
-
 }
 
 void Scenary::resizeEvent(QResizeEvent *event)
@@ -427,5 +434,4 @@ void Scenary::resizeEvent(QResizeEvent *event)
     _x = _y = 0;
     _w_sz = width()/_Col;
     _h_sz = height()/_Rows;
-
 }

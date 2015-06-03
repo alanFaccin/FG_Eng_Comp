@@ -2,7 +2,8 @@ QT += widgets
 
 SOURCES += \
     main.cpp \
-    scenery.cpp
+    scenery.cpp \
+    player.cpp
 
 HEADERS += \
     scenery.h \

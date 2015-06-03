@@ -4,6 +4,7 @@
 #include <QDateTime>
 #include <QVector>
 #include <QPoint>
+#include "player.h"
 
 class Scenary : public QFrame
 {
@@ -16,9 +17,13 @@ public:
     void paintEvent(QPaintEvent* event);
     void keyPressEvent(QKeyEvent* event);
     void resizeEvent(QResizeEvent* event);
+private slots:
+
 
 private:
 
+    Player *_p1;
+    Player *_p2;
     QVector< QVector <QPoint> > RectPos;
     QVector< QVector <int> >  RectColors;
     int _Rows;
