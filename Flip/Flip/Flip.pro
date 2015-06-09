@@ -1,16 +1,16 @@
-QT += widgets
+QT += widgets \
+      multimedia
 
 SOURCES += \
     main.cpp \
     scenery.cpp \
     player.cpp \
-    time_anim_improved.cpp
+    missile.cpp
 
 HEADERS += \
     scenery.h \
     player.h \
-    missile.h \
-    time_anim_improved.h
+    missile.h
 
 RESOURCES += \
     resouce.qrc

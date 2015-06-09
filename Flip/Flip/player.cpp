@@ -1,40 +1,49 @@
 #include "player.h"
 #include <QPainter>
 #include <QDebug>
+#include <QTimer>
+#include "missile.h"
 
 Player::Player(QFrame *parent, const QColor color, int x, int y){
 
+    //qDebug()<<"constructor player";
     this->_color=color;
     _x = x;
-            _y = y;
-    _h_sz = (height()/12)*0.9;
-    _w_sz =(width()/20)*0.9;
+    _y = y;
+    _h_sz = (height()/12)*0.6;
+    _w_sz =(width()/20)*0.6;
+
+    fire = -1;
+
+    for(int i=0;i<5;i++){
+        Missile *_bullet= new Missile(this,this->_color);
+        _municao.push_back(_bullet);
+    }
+
+
+    //    Missile _bullet(this,this->_color);
+    //    _municao.push_back( &_bullet);
+
+
+
+    //funcionava
+    //_bala = new Missile(this,Qt::red,this->_x,this->_y);
+
+
 }
 
 void Player::draw(QPainter &p){
-    _h_sz = (height()/12)*0.9;
-    _w_sz =(width()/20)*0.9;
+
     p.setPen(_color);
     p.setBrush(_color);
     p.drawRoundedRect(_x,_y,_w_sz,_h_sz,2.5,2.5);
 
-}
+    if(!(_municao.isEmpty())){
+      this->getBala()->draw(p);
+    }
 
-void Player::draw2()
-{
-    repaint();
-}
-void Player::paintEvent(QPaintEvent *event){
 
-    QFrame::paintEvent(event);
 
-    QPainter painter(this);
-
-    _h_sz = (height()/12)*0.9;
-    _w_sz =(width()/20)*0.9;
-    painter.setPen(_color);
-    painter.setBrush(_color);
-    painter.drawRoundedRect(_x,_y,_w_sz,_h_sz,2.5,2.5);
 
 }
 
@@ -72,8 +81,48 @@ void Player::setW_size(int w)
 {
     this->_w_sz = w;
 }
-void Player::_teste(){
 
-    qDebug()<<"slotTeste";
-    //this->draw();
+QColor Player::getColor()
+{
+    return this->_color;
 }
+
+void Player::setColor(QColor c)
+{
+    this->_color = c;
+}
+
+void Player::setFire(int qtd)
+{
+    this->fire = qtd;
+}
+int Player::getFire(){
+    return this->fire;
+}
+
+Missile* Player::getBala()
+{
+    if(!(_municao.isEmpty() && this->getFire()+1 >0)){
+        //qDebug()<<_municao.size();
+        //qDebug()<<"municao retornada";
+        qDebug()<<"qtd Fire"<<this->getColor() <<this->getFire()+1;
+        return _municao.at(1);
+    }
+}
+
+void Player::removeBala()
+{
+    if(!(_municao.isEmpty())){
+        qDebug()<< _municao.size();
+        _municao.pop_front();
+        qDebug()<< _municao.size();
+    }else{
+        qDebug()<<"sem munição";
+    }
+}
+
+
+
+
+
+

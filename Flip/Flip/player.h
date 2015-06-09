@@ -11,8 +11,6 @@ class Player: public QFrame
 public:
     Player(QFrame* parent = NULL, const QColor color = Qt::black, int x=0, int y=0);
     void draw(QPainter& p);
-    void draw2();
-    void paintEvent(QPaintEvent* event);
     void setX(int x);
     void setY(int y);
     int getX();
@@ -21,13 +19,26 @@ public:
     int getW_size();
     void setH_size(int h);
     void setW_size(int w);
+    QColor getColor();
+    void setColor(QColor c);
+    void setFire(int qtd);
+    int getFire();
+    Missile* getBala();
+    void removeBala();
+    // teste
+
+signals:
+    //void fire();
 private slots:
-    void _teste();
+    //void fire();
 private:
     QColor _color;
     int _x;
     int _y;
     int _h_sz;
     int _w_sz;
-    QVector <Missile> _municao;
+    int fire;
+
+    //Missile *_bala;
+    QVector <Missile*> _municao;
 };

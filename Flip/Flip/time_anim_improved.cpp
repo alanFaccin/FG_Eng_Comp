@@ -18,15 +18,6 @@ TimeAnimationImproved::TimeAnimationImproved(QWidget* parent) : QWidget(parent)
     _constant_dt = 1000 / _max_fps;
     _last_time_60fps = QDateTime::currentMSecsSinceEpoch();
 
-    _tabuleiro = new Scenary(this);
-    qDebug()<<"constructor time_a_improved";
-    _main_layout = new QVBoxLayout(this);
-
-    _main_layout->addWidget(_tabuleiro);
-    _main_layout->setContentsMargins(0, 0, 0, 0);
-
-    setLayout(_main_layout);
-
     // Start timer
     QTimer::singleShot(1000/_max_fps, this, SLOT(_tick()));
 }
