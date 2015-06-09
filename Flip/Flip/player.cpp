@@ -4,6 +4,10 @@
 #include <QTimer>
 #include "missile.h"
 
+int _bx = 1;
+int _by = 1;
+int _cont = 0;
+
 Player::Player(QFrame *parent, const QColor color, int x, int y){
 
     //qDebug()<<"constructor player";
@@ -40,11 +44,44 @@ void Player::draw(QPainter &p){
 
     if(this->getColor() == Qt::white){
         p.setPen(Qt::black);
-        p.setBrush(Qt::black);
+        p.setBrush(Qt::red);
 
-        for(int i=0;i<5;i++){
-            p.drawEllipse(_x+_w_sz/2-3,_y+2,5,5);
+
+        //for(int i=0;i<5;i++){
+            qDebug()<< (_x+_w_sz/2-3)+_bx << (_y+2)+_by ;
+            p.drawEllipse((_x+_w_sz/2-3)*_bx,(_y+2)*_by,5,5);
+            //p.drawEllipse(_x+_w_sz-8,_y+_h_sz/2-3,5,5);
+            //p.drawEllipse(_x+_w_sz/2,_y+_h_sz/4,5,5);
+
+
+       // }
+        _cont ++;
+        if(_cont == 1 || _cont == 2){
+            _bx+=3;
+            _by+=3;
         }
+        if(_cont == 3 || _cont == 4){
+            _bx-=3;
+            _by+=3;
+        }
+        if(_cont == 5 || _cont == 6){
+            _bx-=3;
+            _by-=3;
+        }
+        if(_cont == 7){
+            _bx+=3;
+            _by-=3;
+        }
+        if(_cont == 8){
+            _bx = 0;
+            _by = 0;
+            _cont =0;
+        }
+
+        qDebug()<<_cont;
+        qDebug()<<_bx;
+        qDebug()<<_by;
+
 
     }
     if(this->getColor() == Qt::black){
@@ -123,7 +160,7 @@ Missile* Player::getBala()
     if(!(_municao.isEmpty() && this->getFire()+1 >0)){
         //qDebug()<<_municao.size();
         //qDebug()<<"municao retornada";
-        qDebug()<<"qtd Fire"<<this->getColor() <<this->getFire()+1;
+        //qDebug()<<"qtd Fire"<<this->getColor() <<this->getFire()+1;
         return _municao.at(1);
     }
 }

@@ -183,7 +183,9 @@ Makefile: ../Flip/Flip.pro C:/Qt/Qt5.4.1/5.4/mingw491_32/mkspecs/win32-g++/qmake
 		C:/Qt/Qt5.4.1/5.4/mingw491_32/lib/qtmaind.prl \
 		C:/Qt/Qt5.4.1/5.4/mingw491_32/lib/Qt5Cored.prl \
 		C:/Qt/Qt5.4.1/5.4/mingw491_32/lib/Qt5Widgets.prl \
+		C:/Qt/Qt5.4.1/5.4/mingw491_32/lib/Qt5Multimedia.prl \
 		C:/Qt/Qt5.4.1/5.4/mingw491_32/lib/Qt5Gui.prl \
+		C:/Qt/Qt5.4.1/5.4/mingw491_32/lib/Qt5Network.prl \
 		C:/Qt/Qt5.4.1/5.4/mingw491_32/lib/Qt5Core.prl
 	$(QMAKE) -spec win32-g++ CONFIG+=debug -o Makefile ..\Flip\Flip.pro
 C:\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\features\spec_pre.prf:
@@ -310,7 +312,9 @@ C:\Qt\Qt5.4.1\5.4\mingw491_32\mkspecs\features\lex.prf:
 C:/Qt/Qt5.4.1/5.4/mingw491_32/lib/qtmaind.prl:
 C:/Qt/Qt5.4.1/5.4/mingw491_32/lib/Qt5Cored.prl:
 C:/Qt/Qt5.4.1/5.4/mingw491_32/lib/Qt5Widgets.prl:
+C:/Qt/Qt5.4.1/5.4/mingw491_32/lib/Qt5Multimedia.prl:
 C:/Qt/Qt5.4.1/5.4/mingw491_32/lib/Qt5Gui.prl:
+C:/Qt/Qt5.4.1/5.4/mingw491_32/lib/Qt5Network.prl:
 C:/Qt/Qt5.4.1/5.4/mingw491_32/lib/Qt5Core.prl:
 qmake: FORCE
 	@$(QMAKE) -spec win32-g++ CONFIG+=debug -o Makefile ..\Flip\Flip.pro

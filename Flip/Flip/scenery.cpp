@@ -31,7 +31,7 @@ Scenary::Scenary(QWidget *parent)
     //time animation improved
     _counter = 0;
     _accumulator60 = 0;
-    _max_fps = 60;
+    _max_fps = 1;
     _constant_dt = 1000 / _max_fps;
     _last_time_60fps = QDateTime::currentMSecsSinceEpoch();
 
@@ -85,7 +85,7 @@ void Scenary::define_Scenary(int type)
     if(type ==1){
 
         //define cenario 1
-        RectColors[0][0]=-1;
+        RectColors[0][0]=0;
         RectColors[0][1]=-1;
         RectColors[0][2]=-1;
         RectColors[0][3]=-1;
@@ -922,15 +922,12 @@ void Scenary::keyPressEvent(QKeyEvent *event)
         }else if (_p1->getBala()->getFireSound()->state() == QMediaPlayer::StoppedState){
             _p1->getBala()->getFireSound()->play();
         }
-        //_p1->getBala()->setTeste(_p1->getBala()->getTeste()+1);
+       // _p1->getBala()->setTeste(_p1->getBala()->getTeste()+1); // comecar a desenhar o tiro
 
-        if(_p1->getFire()<=5){
-            _p1->setFire(_p1->getFire()+1);
-            qDebug()<<"fire no cenario: "<<_p1->getFire();
-        }
-
-
-
+//        if(_p1->getFire()<=5){
+//            _p1->setFire(_p1->getFire()+1);
+//            qDebug()<<"fire no cenario: "<<_p1->getFire();
+//        }
 
 
         break;
@@ -968,7 +965,7 @@ void Scenary::keyPressEvent(QKeyEvent *event)
         }else if (_p2->getBala()->getFireSound()->state() == QMediaPlayer::StoppedState){
             _p2->getBala()->getFireSound()->play();
         }
-        _p2->getBala()->setTeste(_p2->getBala()->getTeste()+1);
+        //_p2->getBala()->setTeste(_p2->getBala()->getTeste()+1);
 
         //_p1->removeBala();
 

@@ -21,13 +21,13 @@ void Missile::draw(QPainter &p)
 {
 
         //if(teste>0){
-          //qDebug()<<teste;
+          //qDebug()<<"teste";
           //teste -=1;
           p.setPen(_color);
           p.setBrush(_color);
           p.drawRect(_x,_y,_w_sz,_h_sz);
           move();
-        //}
+       // }
 
 //    p.setPen(_color);
 //    p.setBrush(Qt::red);
