@@ -38,8 +38,26 @@ void Player::draw(QPainter &p){
     p.setBrush(_color);
     p.drawRoundedRect(_x,_y,_w_sz,_h_sz,2.5,2.5);
 
+    if(this->getColor() == Qt::white){
+        p.setPen(Qt::black);
+        p.setBrush(Qt::black);
+
+        for(int i=0;i<5;i++){
+            p.drawEllipse(_x+_w_sz/2-3,_y+2,5,5);
+        }
+
+    }
+    if(this->getColor() == Qt::black){
+        p.setPen(Qt::white);
+        p.setBrush(Qt::white);
+        p.drawEllipse(_x+_w_sz/2-3,_y,5,5);
+    }
+
+
+
+
     if(!(_municao.isEmpty())){
-      this->getBala()->draw(p);
+        this->getBala()->draw(p);
     }
 
 
