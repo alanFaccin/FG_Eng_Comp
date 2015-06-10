@@ -27,7 +27,10 @@ public:
     void resetfire();
     Missile* getBala();
     void removeBala();
-    // teste
+    void setActive(bool act);
+    bool getActive();
+
+
 
 signals:
     //void fire();
@@ -40,6 +43,7 @@ private:
     int _h_sz;
     int _w_sz;
     int _Qtd_fire;
+    bool _active;
 
     //Missile *_bala;
     QVector <Missile*> _municao;
