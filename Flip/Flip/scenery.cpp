@@ -31,7 +31,7 @@ Scenary::Scenary(QWidget *parent)
     //time animation improved
     _counter = 0;
     _accumulator60 = 0;
-    _max_fps = 1;
+    _max_fps = 60;
     _constant_dt = 1000 / _max_fps;
     _last_time_60fps = QDateTime::currentMSecsSinceEpoch();
 
@@ -85,7 +85,7 @@ void Scenary::define_Scenary(int type)
     if(type ==1){
 
         //define cenario 1
-        RectColors[0][0]=0;
+        RectColors[0][0]=-1;
         RectColors[0][1]=-1;
         RectColors[0][2]=-1;
         RectColors[0][3]=-1;
@@ -492,8 +492,9 @@ int Scenary::Colision_Missile_Scenary_black(Missile *_t)
                             (_t->getY() + _t->get_h_sz()) >= (RectPos[i][j].y()) &&
                             (_t->getY())<= (RectPos[i][j].y()+_h_sz))  {
 
-                        _t->setX(1000);
-                        _t->setY(1000);
+                        _t->setActive(false);
+                        //_t->setX(1000);
+                        // _t->setY(1000);
 
                         return 1;
 
@@ -522,18 +523,12 @@ int Scenary::Colision_Missile_Scenary_black(Missile *_t)
 
 int Scenary::Colision_Missile_Scenary_white(Missile *_t)
 {
-    //teste
-    //qDebug()<<"Colision_Missile_SCenary";
+
     if(_t->getColor() == Qt::white){
         for(int i=0;i<_Rows;i++){
             for(int j=0;j<_Col;j++){
 
                 if(RectColors[i][j] == branco){
-
-                    //                    qDebug()<< _t->getX()+_t->get_w_sz() << ">="<<(RectPos[i][j].x())
-                    //                            << (_t->getX())<<"<="<<(RectPos[i][j].x()+_w_sz)
-                    //                            << (_t->getY() + _t->get_h_sz())<< ">=" <<(RectPos[i][j].y())
-                    //                            << (_t->getY())<< "<="<< (RectPos[i][j].y()+_h_sz);
 
                     if((_t->getX()+_t->get_w_sz())>=(RectPos[i][j].x()) &&
                             (_t->getX())<=(RectPos[i][j].x()+_w_sz) &&
@@ -562,8 +557,8 @@ int Scenary::Colision_Missile_Scenary_white(Missile *_t)
                             (_t->getY() + _t->get_h_sz()) >= (RectPos[i][j].y()) &&
                             (_t->getY())<= (RectPos[i][j].y()+_h_sz))  {
 
-                        _t->setX(1000);
-                        _t->setY(1000);
+
+                        _t->setActive(false);
 
                         return 1;
 
@@ -917,18 +912,20 @@ void Scenary::keyPressEvent(QKeyEvent *event)
 
         //start fire
 
-        if(_p1->getBala()->getFireSound()->state() == QMediaPlayer::PlayingState){
-            _p1->getBala()->getFireSound()->setPosition(0);
-        }else if (_p1->getBala()->getFireSound()->state() == QMediaPlayer::StoppedState){
-            _p1->getBala()->getFireSound()->play();
+
+        if(_p1->getBala()->getQtdTiro()<=5 && tecla_b != NULL){
+            _p1->getBala()->setActive(true);
+            if(_p1->getBala()->getFireSound()->state() == QMediaPlayer::PlayingState ){
+                _p1->getBala()->getFireSound()->setPosition(0);
+            }else if (_p1->getBala()->getFireSound()->state() == QMediaPlayer::StoppedState){
+                _p1->getBala()->getFireSound()->play();
+            }
+            _p1->addFire();
+            _p1->getBala()->addTiro();
+
+        }else{
+            _p1->getBala()->resetTiro();
         }
-       // _p1->getBala()->setTeste(_p1->getBala()->getTeste()+1); // comecar a desenhar o tiro
-
-//        if(_p1->getFire()<=5){
-//            _p1->setFire(_p1->getFire()+1);
-//            qDebug()<<"fire no cenario: "<<_p1->getFire();
-//        }
-
 
         break;
     case Qt::Key_U:
@@ -936,12 +933,12 @@ void Scenary::keyPressEvent(QKeyEvent *event)
 
         //set direction
         if(tecla_p == Qt::Key_W){
-            qDebug()<<"teclau";
+            //qDebug()<<"teclau";
             _p2->getBala()->setX(_p2->getX()+(_p2->getW_size()/2)-(_p2->getBala()->get_h_sz()/2));
             _p2->getBala()->setY(_p2->getY()- _p2->getBala()->get_h_sz());
             _p2->getBala()->setDirection('u');
-            qDebug()<<_p2->getBala()->getX();
-            qDebug()<<_p2->getBala()->getY();
+            //qDebug()<<_p2->getBala()->getX();
+            //qDebug()<<_p2->getBala()->getY();
         }
         if(tecla_p == Qt::Key_S){
             _p2->getBala()->setX(_p2->getX()+(_p2->getW_size()/2)-(_p1->getBala()->get_h_sz()/2));
@@ -960,12 +957,20 @@ void Scenary::keyPressEvent(QKeyEvent *event)
         }
 
         //start fire
-        if(_p2->getBala()->getFireSound()->state() == QMediaPlayer::PlayingState){
-            _p2->getBala()->getFireSound()->setPosition(0);
-        }else if (_p2->getBala()->getFireSound()->state() == QMediaPlayer::StoppedState){
-            _p2->getBala()->getFireSound()->play();
+
+
+
+        if(_p2->getBala()->getQtdTiro() <= 5 && tecla_p != NULL){
+            _p2->getBala()->setActive(true);
+            if(_p2->getBala()->getFireSound()->state() == QMediaPlayer::PlayingState){
+                _p2->getBala()->getFireSound()->setPosition(0);
+            }else if (_p2->getBala()->getFireSound()->state() == QMediaPlayer::StoppedState){
+                _p2->getBala()->getFireSound()->play();
+            }
+            _p2->getBala()->addTiro();
         }
-        //_p2->getBala()->setTeste(_p2->getBala()->getTeste()+1);
+
+
 
         //_p1->removeBala();
 

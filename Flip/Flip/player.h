@@ -21,8 +21,10 @@ public:
     void setW_size(int w);
     QColor getColor();
     void setColor(QColor c);
-    void setFire(int qtd);
-    int getFire();
+    void setQtdFire(int qtd);
+    int getQtdFire();
+    void addFire();
+    void resetfire();
     Missile* getBala();
     void removeBala();
     // teste
@@ -37,7 +39,7 @@ private:
     int _y;
     int _h_sz;
     int _w_sz;
-    int fire;
+    int _Qtd_fire;
 
     //Missile *_bala;
     QVector <Missile*> _municao;

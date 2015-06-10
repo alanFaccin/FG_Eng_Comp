@@ -11,6 +11,8 @@ Missile::Missile(QFrame *parent,const QColor color,int x, int y)
     this->_w_sz = 10;
     this->_h_sz = 10;
     this->_color = color;
+    this->_active = false;
+    this->_qtd_tiro=0;
 
     _fire_sound = new QMediaPlayer();
     _fire_sound->setMedia(QUrl("C:/Users/AlanJhones/Documents/GitHub/Flip_Game/Flip/Flip/sounds/fire2.wav"));
@@ -20,14 +22,15 @@ Missile::Missile(QFrame *parent,const QColor color,int x, int y)
 void Missile::draw(QPainter &p)
 {
 
-        //if(teste>0){
-          //qDebug()<<"teste";
+        if(_active && _qtd_tiro <= 5){
+          qDebug()<<_qtd_tiro;
           //teste -=1;
           p.setPen(_color);
           p.setBrush(_color);
           p.drawRect(_x,_y,_w_sz,_h_sz);
+
           move();
-       // }
+        }
 
 //    p.setPen(_color);
 //    p.setBrush(Qt::red);
@@ -103,6 +106,16 @@ QMediaPlayer *Missile::getFireSound()
     return this->_fire_sound;
 }
 
+void Missile::setActive(bool act)
+{
+    this->_active = act;
+}
+
+bool Missile::getActive()
+{
+    return this->_active;
+}
+
 void Missile::move()
 {
     if(_direction == 'u'){
@@ -120,12 +133,22 @@ void Missile::move()
     //qDebug()<<"move";
     //QTimer::singleShot(10, this, SLOT(move()));
 }
-void Missile::setTeste(int t)
+void Missile::setQtdTiro(int t)
 {
-    this->teste = t;
+    this->_qtd_tiro = t;
 }
-int Missile::getTeste()
+int Missile::getQtdTiro()
 {
-    return this->teste;
+    return this->_qtd_tiro;
+}
+
+void Missile::addTiro()
+{
+    _qtd_tiro++;
+}
+
+void Missile::resetTiro()
+{
+    _qtd_tiro = 0;
 }
 

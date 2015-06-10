@@ -22,9 +22,12 @@ public:
     void setColor(QColor c);
     QColor getColor();
     QMediaPlayer* getFireSound();
-
-    void setTeste(int t);
-    int getTeste();
+    void setActive(bool act);
+    bool getActive();
+    void setQtdTiro(int t);
+    int getQtdTiro();
+    void addTiro();
+    void resetTiro();
 
 private slots:
     void move();
@@ -37,5 +40,6 @@ private:
     int _h_sz;
     int _w_sz;
     char _direction;
-    int teste;
+    bool _active;
+    int _qtd_tiro;
 };
