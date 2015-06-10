@@ -9,6 +9,7 @@
 #include "missile.h"
 #include <QMediaPlayer>
 #include <QSound>
+#include <QDebug>
 
 #define preto 1
 #define branco 0
@@ -23,6 +24,8 @@ float pos_x_atua_p1,pos_y_atua_p1,pos_x_atua_p2,pos_y_atua_p2;
 
 bool keyLeft = false,keyRight = false,keyUp = false,keyDown = false, KeySpace = false;
 bool keyA = false,keyD = false,keyW = false,keyS = false;
+
+//Missile _bu;
 
 
 Scenary::Scenary(QWidget *parent)
@@ -45,6 +48,8 @@ Scenary::Scenary(QWidget *parent)
     _w_sz = width()/_Col;
     _h_sz = height()/_Rows;
     _x = _y = 0;
+
+    _cont_t =0;
 
     RectColors.resize(_Rows);
     for(int r = 0; r < _Rows; r++) {
@@ -493,8 +498,8 @@ int Scenary::Colision_Missile_Scenary_black(Missile *_t)
                             (_t->getY())<= (RectPos[i][j].y()+_h_sz))  {
 
                         _t->setActive(false);
-                        //_t->setX(1000);
-                        // _t->setY(1000);
+                        _t->setX(1000);
+                        _t->setY(1000);
 
                         return 1;
 
@@ -510,8 +515,10 @@ int Scenary::Colision_Missile_Scenary_black(Missile *_t)
                     for(int i=0;i<_Rows;i++){
                         for(int j=0;j<_Col;j++){
                             RectColors[i][j] = branco;
+                            _p1->setActive(false);
                         }
                     }
+
 
                     return 1;
 
@@ -560,6 +567,9 @@ int Scenary::Colision_Missile_Scenary_white(Missile *_t)
 
                         _t->setActive(false);
 
+                        //_t->setX(1000);
+                        //_t->setY(1000);
+
                         return 1;
 
                     }
@@ -573,10 +583,11 @@ int Scenary::Colision_Missile_Scenary_white(Missile *_t)
 
                     for(int i=0;i<_Rows;i++){
                         for(int j=0;j<_Col;j++){
+                            qDebug()<<RectColors[i][j];
                             RectColors[i][j] = preto;
                         }
                     }
-
+                    _p2->setActive(false);
                     return 1;
 
                 }
@@ -783,6 +794,9 @@ void Scenary::_tick()
         }
 
         this->draw();
+        // acumula qtd vezes que passou aqui
+        _cont_t++;
+
         _last_time_60fps = now;
     }
 
@@ -839,12 +853,43 @@ void Scenary::paintEvent(QPaintEvent *event)
     //draw player
     this->Colision_cenario();
 
-    Colision_Missile_Scenary_white(_p1->getBala());
-    Colision_Missile_Scenary_black(_p2->getBala());
+    if(_p1->getActive() && _p1->getBala()->getActive()){
+     Colision_Missile_Scenary_white(_p1->getBala());
+    }
+    if(_p2->getActive()&& _p2->getBala()->getActive()){
+     Colision_Missile_Scenary_black(_p2->getBala());
+    }
 
     _p1->draw(painter);
     _p2->draw(painter);
 
+    if(_cont_t == 20){
+
+        // imprime um tiro especial
+
+
+        //_*bu.setX(rand() % 799 + 0);
+        //_bu.setY(rand() % 600 + 0);
+
+       // _bu.setActive(true);*/
+
+
+
+        //_special.push_back(_bullet);
+
+    }
+
+
+//    if(_cont_t == 50){
+//        _bu.draw(painter);
+//        _cont_t=50;
+//    }
+
+
+//    if(_cont_t == 25){
+//        this->getSpecial()->draw(painter);
+//        _cont_t=0;
+//    }
 
 
 }
@@ -1049,4 +1094,12 @@ void Scenary::resizeEvent(QResizeEvent *event)
         _p2->setY(height()*pos_y_atua_p2);
     }
 
+}
+
+
+Missile *Scenary::getSpecial()
+{
+    if(!(_special.isEmpty())){
+        return _special.at(_special.size() -1);
+    }
 }

@@ -11,7 +11,7 @@ int _qtd_print = 0;
 
 Player::Player(QFrame *parent, const QColor color, int x, int y){
 
-    //qDebug()<<"constructor player";
+    _active = true;
     this->_color=color;
     _x = x;
     _y = y;
@@ -39,63 +39,69 @@ Player::Player(QFrame *parent, const QColor color, int x, int y){
 
 void Player::draw(QPainter &p){
 
-    p.setPen(_color);
-    p.setBrush(_color);
-    p.drawRoundedRect(_x,_y,_w_sz,_h_sz,2.5,2.5);
-    _qtd_print ++;
-    if(_qtd_print == 3){
-
-        if(this->getColor() == Qt::white){
-            p.setPen(Qt::black);
-            p.setBrush(Qt::black);
-
-
-            //for(int i=0;i<5;i++){
-                //qDebug()<< (_x+_w_sz/2-3)+_bx << (_y+2)+_by ;
-                //p.drawEllipse((_x+_w_sz/2-3)+_bx,(_y+2)+_by,5,5);
-                //p.drawEllipse((_x+_w_sz-8)+_bx,(_y+_h_sz/2-3)+_by,5,5);
-                //p.drawEllipse(_x+_w_sz/2,_y+_h_sz/4,5,5);
-           // }
-            _cont ++;
-            if(_cont == 1 || _cont == 2){
-                _bx+=5;
-                _by+=5;
-            }
-            if(_cont == 3 || _cont == 4){
-                _bx-=5;
-                _by+=5;
-            }
-            if(_cont == 5 || _cont == 6){
-                _bx-=5;
-                _by-=5;
-            }
-            if(_cont == 7){
-                _bx+=5;
-                _by-=5;
-            }
-            if(_cont == 8){
-                _bx = 0;
-                _by = 0;
-                _cont =0;
-            }
-
-//            qDebug()<<_cont;
-//            qDebug()<<_bx;
-//            qDebug()<<_by;
-
-
-        }
-        if(this->getColor() == Qt::black){
-            p.setPen(Qt::white);
-            p.setBrush(Qt::white);
-            p.drawEllipse(_x+_w_sz/2-3,_y,5,5);
-        }
-
-        _qtd_print =0;
-
-
+    if(_active){
+        p.setPen(_color);
+        p.setBrush(_color);
+        p.drawRoundedRect(_x,_y,_w_sz,_h_sz,2.5,2.5);
+        _qtd_print ++;
+    }else{
+        this->getBala()->setActive(false);
+        this->getBala()->setQtdTiro(10);
     }
-    p.drawEllipse((_x+_w_sz/2-3)+_bx,(_y+2)+_by,5,5);
+
+//    if(_qtd_print == 3){
+
+//        if(this->getColor() == Qt::white){
+//            p.setPen(Qt::black);
+//            p.setBrush(Qt::black);
+
+
+//            //for(int i=0;i<5;i++){
+//                //qDebug()<< (_x+_w_sz/2-3)+_bx << (_y+2)+_by ;
+//                //p.drawEllipse((_x+_w_sz/2-3)+_bx,(_y+2)+_by,5,5);
+//                //p.drawEllipse((_x+_w_sz-8)+_bx,(_y+_h_sz/2-3)+_by,5,5);
+//                //p.drawEllipse(_x+_w_sz/2,_y+_h_sz/4,5,5);
+//           // }
+//            _cont ++;
+//            if(_cont == 1 || _cont == 2){
+//                _bx+=5;
+//                _by+=5;
+//            }
+//            if(_cont == 3 || _cont == 4){
+//                _bx-=5;
+//                _by+=5;
+//            }
+//            if(_cont == 5 || _cont == 6){
+//                _bx-=5;
+//                _by-=5;
+//            }
+//            if(_cont == 7){
+//                _bx+=5;
+//                _by-=5;
+//            }
+//            if(_cont == 8){
+//                _bx = 0;
+//                _by = 0;
+//                _cont =0;
+//            }
+
+////            qDebug()<<_cont;
+////            qDebug()<<_bx;
+////            qDebug()<<_by;
+
+
+//        }
+//        if(this->getColor() == Qt::black){
+//            p.setPen(Qt::white);
+//            p.setBrush(Qt::white);
+//            p.drawEllipse(_x+_w_sz/2-3,_y,5,5);
+//        }
+
+//        _qtd_print =0;
+
+
+//    }
+    //p.drawEllipse((_x+_w_sz/2-3)+_bx,(_y+2)+_by,5,5);
 
 
 
@@ -193,6 +199,18 @@ void Player::removeBala()
         qDebug()<<"sem munição";
     }
 }
+
+void Player::setActive(bool act)
+{
+    this->_active = act;
+}
+
+bool Player::getActive()
+{
+    return this->_active;
+}
+
+
 
 
 
