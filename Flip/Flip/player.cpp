@@ -18,21 +18,37 @@ Player::Player(QFrame *parent, const QColor color, int x, int y){
     _h_sz = (height()/12)*0.6;
     _w_sz =(width()/20)*0.6;
 
-    _Qtd_fire = 0;
+    _Qtd_fire = -1;
 
     for(int i=0;i<5;i++){
         Missile *_bullet= new Missile(this,this->_color);
-        _municao.push_back(_bullet);
+//        if(i==0){
+//            Missile *_bullet= new Missile(this,Qt::red);
+//            _municao.push_back(_bullet);
+//        }
+//        if(i==1){
+//            Missile *_bullet= new Missile(this,Qt::blue);
+//            _municao.push_back(_bullet);
+//        }
+//        if(i==2){
+//            Missile *_bullet= new Missile(this,Qt::green);
+//            _municao.push_back(_bullet);
+//        }
+//        if(i==3){
+//            Missile *_bullet= new Missile(this,Qt::yellow);
+//            _municao.push_back(_bullet);
+//        }
+//        if(i==4){
+//            Missile *_bullet= new Missile(this,Qt::magenta);
+//            _municao.push_back(_bullet);
+//        }
+         _municao.push_back(_bullet);
     }
+    qDebug()<<_municao.size();
 
-
-    //    Missile _bullet(this,this->_color);
-    //    _municao.push_back( &_bullet);
-
-
-
-    //funcionava
-    //_bala = new Missile(this,Qt::red,this->_x,this->_y);
+    for(int i=0;i<5;i++){
+        qDebug()<<_municao.at(i)->getActive();
+    }
 
 
 }
@@ -45,70 +61,22 @@ void Player::draw(QPainter &p){
         p.drawRoundedRect(_x,_y,_w_sz,_h_sz,2.5,2.5);
         _qtd_print ++;
     }else{
-        this->getBala()->setActive(false);
-        this->getBala()->setQtdTiro(10);
+        //this->getBala(this->getQtdFire())->setActive(false);
+        //this->getBala(this->getQtdFire())->setQtdTiro(10);
     }
 
-//    if(_qtd_print == 3){
+    qDebug()<<_Qtd_fire;
+    if(_Qtd_fire >=0){
+          qDebug()<<"Alan";
+        for(int i=0;i<5;i++){
 
-//        if(this->getColor() == Qt::white){
-//            p.setPen(Qt::black);
-//            p.setBrush(Qt::black);
+            if(_municao.at(i)->getActive()){
 
-
-//            //for(int i=0;i<5;i++){
-//                //qDebug()<< (_x+_w_sz/2-3)+_bx << (_y+2)+_by ;
-//                //p.drawEllipse((_x+_w_sz/2-3)+_bx,(_y+2)+_by,5,5);
-//                //p.drawEllipse((_x+_w_sz-8)+_bx,(_y+_h_sz/2-3)+_by,5,5);
-//                //p.drawEllipse(_x+_w_sz/2,_y+_h_sz/4,5,5);
-//           // }
-//            _cont ++;
-//            if(_cont == 1 || _cont == 2){
-//                _bx+=5;
-//                _by+=5;
-//            }
-//            if(_cont == 3 || _cont == 4){
-//                _bx-=5;
-//                _by+=5;
-//            }
-//            if(_cont == 5 || _cont == 6){
-//                _bx-=5;
-//                _by-=5;
-//            }
-//            if(_cont == 7){
-//                _bx+=5;
-//                _by-=5;
-//            }
-//            if(_cont == 8){
-//                _bx = 0;
-//                _by = 0;
-//                _cont =0;
-//            }
-
-////            qDebug()<<_cont;
-////            qDebug()<<_bx;
-////            qDebug()<<_by;
-
-
-//        }
-//        if(this->getColor() == Qt::black){
-//            p.setPen(Qt::white);
-//            p.setBrush(Qt::white);
-//            p.drawEllipse(_x+_w_sz/2-3,_y,5,5);
-//        }
-
-//        _qtd_print =0;
-
-
-//    }
-    //p.drawEllipse((_x+_w_sz/2-3)+_bx,(_y+2)+_by,5,5);
-
-
-
-
-    if(!(_municao.isEmpty())){
-        this->getBala()->draw(p);
+                _municao.at(i)->draw(p);
+            }
+        }
     }
+
 
 
 
@@ -178,14 +146,10 @@ void Player::resetfire()
     _Qtd_fire = 0;
 }
 
-Missile* Player::getBala()
+Missile* Player::getBala(int index)
 {
-    //qDebug()<<_Qtd_fire;
     if(!(_municao.isEmpty())){
-        //qDebug()<<_municao.size();
-        //qDebug()<<"municao retornada";
-        //qDebug()<<"qtd Fire"<<this->getColor() <<this->getFire()+1;
-        return _municao.at(1);
+        return _municao.at(index);
     }
 }
 

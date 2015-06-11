@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/sounds">
+        <file>sounds/bg_music.MP3</file>
+        <file>sounds/c_tab.wav</file>
+        <file>sounds/fire.mp3</file>
+        <file>sounds/fire2.wav</file>
+    </qresource>
+    <qresource prefix="/teste">
+        <file>bg_music.MP3</file>
+    </qresource>
+</RCC>

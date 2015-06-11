@@ -13,4 +13,4 @@ HEADERS += \
     missile.h
 
 RESOURCES += \
-    resouce.qrc
+    res.qrc

@@ -70,7 +70,10 @@ Scenary::Scenary(QWidget *parent)
 
     QMediaPlayer *_bg_music = new QMediaPlayer();
     _bg_music->setMedia(QUrl("C:/Users/AlanJhones/Documents/GitHub/Flip_Game/Flip/Flip/sounds/bg_music.mp3"));
+    //_bg_music->setMedia(":/teste/bg_music.mp3");
+    //qDebug()<<_bg_music->mediaStatus();
     _bg_music->play();
+    //qDebug()<<_bg_music->mediaStatus();
     // sound colision
     _colision_music = new QMediaPlayer();
     _colision_music->setMedia(QUrl("C:/Users/AlanJhones/Documents/GitHub/Flip_Game/Flip/Flip/sounds/c_tab.wav"));
@@ -853,12 +856,17 @@ void Scenary::paintEvent(QPaintEvent *event)
     //draw player
     this->Colision_cenario();
 
-    if(_p1->getActive() && _p1->getBala()->getActive()){
-     Colision_Missile_Scenary_white(_p1->getBala());
+    if(_p1->getQtdFire()>=0){
+        if(_p1->getActive() && _p1->getBala(_p1->getQtdFire())->getActive()){
+            Colision_Missile_Scenary_white(_p1->getBala(_p1->getQtdFire()));
+        }
     }
-    if(_p2->getActive()&& _p2->getBala()->getActive()){
-     Colision_Missile_Scenary_black(_p2->getBala());
+    if(_p2->getQtdFire()>=0){
+        if(_p2->getActive()&& _p2->getBala(_p1->getQtdFire())->getActive()){
+            Colision_Missile_Scenary_black(_p2->getBala(_p1->getQtdFire()));
+        }
     }
+
 
     _p1->draw(painter);
     _p2->draw(painter);
@@ -871,7 +879,7 @@ void Scenary::paintEvent(QPaintEvent *event)
         //_*bu.setX(rand() % 799 + 0);
         //_bu.setY(rand() % 600 + 0);
 
-       // _bu.setActive(true);*/
+        // _bu.setActive(true);*/
 
 
 
@@ -880,16 +888,16 @@ void Scenary::paintEvent(QPaintEvent *event)
     }
 
 
-//    if(_cont_t == 50){
-//        _bu.draw(painter);
-//        _cont_t=50;
-//    }
+    //    if(_cont_t == 50){
+    //        _bu.draw(painter);
+    //        _cont_t=50;
+    //    }
 
 
-//    if(_cont_t == 25){
-//        this->getSpecial()->draw(painter);
-//        _cont_t=0;
-//    }
+    //    if(_cont_t == 25){
+    //        this->getSpecial()->draw(painter);
+    //        _cont_t=0;
+    //    }
 
 
 }
@@ -932,102 +940,99 @@ void Scenary::keyPressEvent(QKeyEvent *event)
         break;
     case Qt::Key_Space:
         // atualiza as Coordenadas do tiro
-        //qDebug()<<"Space Bar";
+        // qDebug()<<"QTD:"<<_p1->getQtdFire();
         //set direction
+        _p1->addFire();
         if(tecla_b == Qt::Key_Up){
-            _p1->getBala()->setX(_p1->getX()+(_p1->getW_size()/2)-(_p1->getBala()->get_h_sz()/2));
-            _p1->getBala()->setY(_p1->getY()- _p1->getBala()->get_h_sz());
-            _p1->getBala()->setDirection('u');
+            _p1->getBala(_p1->getQtdFire())->setX(_p1->getX()+(_p1->getW_size()/2)-(_p1->getBala(_p1->getQtdFire())->get_h_sz()/2));
+            _p1->getBala(_p1->getQtdFire())->setY(_p1->getY()- _p1->getBala(_p1->getQtdFire())->get_h_sz());
+            _p1->getBala(_p1->getQtdFire())->setDirection('u');
         }
         if(tecla_b == Qt::Key_Down){
-            _p1->getBala()->setX(_p1->getX()+(_p1->getW_size()/2)-(_p1->getBala()->get_h_sz()/2));
-            _p1->getBala()->setY(_p1->getY()+_p1->getH_size());
-            _p1->getBala()->setDirection('d');
+            _p1->getBala(_p1->getQtdFire())->setX(_p1->getX()+(_p1->getW_size()/2)-(_p1->getBala(_p1->getQtdFire())->get_h_sz()/2));
+            _p1->getBala(_p1->getQtdFire())->setY(_p1->getY()+_p1->getH_size());
+            _p1->getBala(_p1->getQtdFire())->setDirection('d');
         }
         if(tecla_b == Qt::Key_Right){
-            _p1->getBala()->setX(_p1->getX()+_p1->getW_size());
-            _p1->getBala()->setY(_p1->getY()+(_p1->getH_size())/2-(_p1->getBala()->get_h_sz()/2));
-            _p1->getBala()->setDirection('r');
+            _p1->getBala(_p1->getQtdFire())->setX(_p1->getX()+_p1->getW_size());
+            _p1->getBala(_p1->getQtdFire())->setY(_p1->getY()+(_p1->getH_size())/2-(_p1->getBala(_p1->getQtdFire())->get_h_sz()/2));
+            _p1->getBala(_p1->getQtdFire())->setDirection('r');
         }
         if(tecla_b == Qt::Key_Left){
-            _p1->getBala()->setX(_p1->getX()-_p1->getBala()->get_w_sz());
-            _p1->getBala()->setY(_p1->getY()+(_p1->getH_size())/2-(_p1->getBala()->get_h_sz()/2));
-            _p1->getBala()->setDirection('l');
+            _p1->getBala(_p1->getQtdFire())->setX(_p1->getX()-_p1->getBala(_p1->getQtdFire())->get_w_sz());
+            _p1->getBala(_p1->getQtdFire())->setY(_p1->getY()+(_p1->getH_size())/2-(_p1->getBala(_p1->getQtdFire())->get_h_sz()/2));
+            _p1->getBala(_p1->getQtdFire())->setDirection('l');
         }
 
         //start fire
 
-
-        if(_p1->getBala()->getQtdTiro()<=5 && tecla_b != NULL){
-            _p1->getBala()->setActive(true);
-            if(_p1->getBala()->getFireSound()->state() == QMediaPlayer::PlayingState ){
-                _p1->getBala()->getFireSound()->setPosition(0);
-            }else if (_p1->getBala()->getFireSound()->state() == QMediaPlayer::StoppedState){
-                _p1->getBala()->getFireSound()->play();
+        if(_p1->getBala(_p1->getQtdFire())->getQtdTiro()<=5 && tecla_b != NULL){
+            _p1->getBala(_p1->getQtdFire())->setActive(true);
+            if(_p1->getBala(_p1->getQtdFire())->getFireSound()->state() == QMediaPlayer::PlayingState ){
+                _p1->getBala(_p1->getQtdFire())->getFireSound()->setPosition(0);
+            }else if (_p1->getBala(_p1->getQtdFire())->getFireSound()->state() == QMediaPlayer::StoppedState){
+                _p1->getBala(_p1->getQtdFire())->getFireSound()->play();
             }
-            _p1->addFire();
-            _p1->getBala()->addTiro();
+
+            _p1->getBala(_p1->getQtdFire())->addTiro();
+
 
         }else{
-            _p1->getBala()->resetTiro();
+            //_p1->getBala(_p1->getQtdFire())->resetTiro();
         }
 
         break;
     case Qt::Key_U:
         // atualiza as Coordenadas do tiro
-
+        // qDebug()<<"QTD:"<<_p1->getQtdFire();
         //set direction
+        _p2->addFire();
         if(tecla_p == Qt::Key_W){
-            //qDebug()<<"teclau";
-            _p2->getBala()->setX(_p2->getX()+(_p2->getW_size()/2)-(_p2->getBala()->get_h_sz()/2));
-            _p2->getBala()->setY(_p2->getY()- _p2->getBala()->get_h_sz());
-            _p2->getBala()->setDirection('u');
-            //qDebug()<<_p2->getBala()->getX();
-            //qDebug()<<_p2->getBala()->getY();
+            _p2->getBala(_p2->getQtdFire())->setX(_p2->getX()+(_p2->getW_size()/2)-(_p2->getBala(_p2->getQtdFire())->get_h_sz()/2));
+            _p2->getBala(_p2->getQtdFire())->setY(_p2->getY()- _p2->getBala(_p2->getQtdFire())->get_h_sz());
+            _p2->getBala(_p2->getQtdFire())->setDirection('u');
         }
         if(tecla_p == Qt::Key_S){
-            _p2->getBala()->setX(_p2->getX()+(_p2->getW_size()/2)-(_p1->getBala()->get_h_sz()/2));
-            _p2->getBala()->setY(_p2->getY()+_p2->getH_size());
-            _p2->getBala()->setDirection('d');
+            _p2->getBala(_p2->getQtdFire())->setX(_p2->getX()+(_p2->getW_size()/2)-(_p2->getBala(_p2->getQtdFire())->get_h_sz()/2));
+            _p2->getBala(_p2->getQtdFire())->setY(_p2->getY()+_p2->getH_size());
+            _p2->getBala(_p2->getQtdFire())->setDirection('d');
         }
         if(tecla_p == Qt::Key_D){
-            _p2->getBala()->setX(_p2->getX()+_p2->getW_size());
-            _p2->getBala()->setY(_p2->getY()+(_p2->getH_size())/2-(_p2->getBala()->get_h_sz()/2));
-            _p2->getBala()->setDirection('r');
+            _p2->getBala(_p2->getQtdFire())->setX(_p2->getX()+_p2->getW_size());
+            _p2->getBala(_p2->getQtdFire())->setY(_p2->getY()+(_p2->getH_size())/2-(_p2->getBala(_p2->getQtdFire())->get_h_sz()/2));
+            _p2->getBala(_p2->getQtdFire())->setDirection('r');
         }
         if(tecla_p == Qt::Key_A){
-            _p2->getBala()->setX(_p2->getX()-_p2->getBala()->get_w_sz());
-            _p2->getBala()->setY(_p2->getY()+(_p2->getH_size())/2-(_p2->getBala()->get_h_sz()/2));
-            _p2->getBala()->setDirection('l');
+            _p2->getBala(_p2->getQtdFire())->setX(_p2->getX()-_p2->getBala(_p2->getQtdFire())->get_w_sz());
+            _p2->getBala(_p2->getQtdFire())->setY(_p2->getY()+(_p2->getH_size())/2-(_p2->getBala(_p2->getQtdFire())->get_h_sz()/2));
+            _p2->getBala(_p2->getQtdFire())->setDirection('l');
         }
 
         //start fire
 
-
-
-        if(_p2->getBala()->getQtdTiro() <= 5 && tecla_p != NULL){
-            _p2->getBala()->setActive(true);
-            if(_p2->getBala()->getFireSound()->state() == QMediaPlayer::PlayingState){
-                _p2->getBala()->getFireSound()->setPosition(0);
-            }else if (_p2->getBala()->getFireSound()->state() == QMediaPlayer::StoppedState){
-                _p2->getBala()->getFireSound()->play();
+        if(_p2->getBala(_p2->getQtdFire())->getQtdTiro()<=5 && tecla_p != NULL){
+            _p2->getBala(_p2->getQtdFire())->setActive(true);
+            if(_p2->getBala(_p2->getQtdFire())->getFireSound()->state() == QMediaPlayer::PlayingState ){
+                _p2->getBala(_p2->getQtdFire())->getFireSound()->setPosition(0);
+            }else if (_p2->getBala(_p2->getQtdFire())->getFireSound()->state() == QMediaPlayer::StoppedState){
+                _p2->getBala(_p2->getQtdFire())->getFireSound()->play();
             }
-            _p2->getBala()->addTiro();
+
+            _p2->getBala(_p2->getQtdFire())->addTiro();
+
+
+        }else{
+            //_p1->getBala(_p1->getQtdFire())->resetTiro();
         }
 
-
-
-        //_p1->removeBala();
-
-
-
         break;
+
+
+
     }
-
     movePalyer();
-    //repaint();
-
 }
+
 void Scenary::keyReleaseEvent(QKeyEvent *event) {
 
     if (!event->isAutoRepeat()) {

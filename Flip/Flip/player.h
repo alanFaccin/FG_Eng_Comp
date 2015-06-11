@@ -25,7 +25,7 @@ public:
     int getQtdFire();
     void addFire();
     void resetfire();
-    Missile* getBala();
+    Missile* getBala(int index);
     void removeBala();
     void setActive(bool act);
     bool getActive();

@@ -23,7 +23,7 @@ void Missile::draw(QPainter &p)
 {
 
         if(_active && _qtd_tiro <= 5){
-          //qDebug()<<_qtd_tiro;
+
           //teste -=1;
           p.setPen(_color);
           p.setBrush(_color);
@@ -31,7 +31,7 @@ void Missile::draw(QPainter &p)
 
           move();
         }else{
-            _active = false;
+           // _active = false;
         }
 
 //    p.setPen(_color);
