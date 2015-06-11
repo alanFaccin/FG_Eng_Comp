@@ -947,7 +947,14 @@ debug/player.o: ../Flip/player.cpp ../Flip/player.h \
 		C:/Qt/Qt5.4.1/5.4/mingw491_32/include/QtCore/QDebug \
 		C:/Qt/Qt5.4.1/5.4/mingw491_32/include/QtCore/QTimer \
 		C:/Qt/Qt5.4.1/5.4/mingw491_32/include/QtCore/qtimer.h \
-		C:/Qt/Qt5.4.1/5.4/mingw491_32/include/QtCore/qbasictimer.h
+		C:/Qt/Qt5.4.1/5.4/mingw491_32/include/QtCore/qbasictimer.h \
+		C:/Qt/Qt5.4.1/5.4/mingw491_32/include/QtWidgets/QApplication \
+		C:/Qt/Qt5.4.1/5.4/mingw491_32/include/QtWidgets/qapplication.h \
+		C:/Qt/Qt5.4.1/5.4/mingw491_32/include/QtCore/qcoreapplication.h \
+		C:/Qt/Qt5.4.1/5.4/mingw491_32/include/QtCore/qeventloop.h \
+		C:/Qt/Qt5.4.1/5.4/mingw491_32/include/QtWidgets/qdesktopwidget.h \
+		C:/Qt/Qt5.4.1/5.4/mingw491_32/include/QtGui/qguiapplication.h \
+		C:/Qt/Qt5.4.1/5.4/mingw491_32/include/QtGui/qinputmethod.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\player.o ..\Flip\player.cpp
 
 debug/missile.o: ../Flip/missile.cpp ../Flip/missile.h \

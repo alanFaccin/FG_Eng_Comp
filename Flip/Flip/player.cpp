@@ -3,10 +3,16 @@
 #include <QDebug>
 #include <QTimer>
 #include <QApplication>
+#include <math.h>
 #include "missile.h"
 
-int _bx = 1;
-int _by = 1;
+int _bx = 0,_bx_2 = 0;
+int _by = 0,_by_2 = 0;
+int _rad = 0,_rad_2= 0;
+int _raio = 0;
+int _gr = 0,_gr_2 = 72;
+
+
 int _cont = 0;
 int _qtd_print = 0;
 
@@ -23,32 +29,32 @@ Player::Player(QFrame *parent, const QColor color, int x, int y){
 
     for(int i=0;i<5;i++){
         Missile *_bullet= new Missile(this,this->_color);
-//        if(i==0){
-//            Missile *_bullet= new Missile(this,Qt::red);
-//            _municao.push_back(_bullet);
-//        }
-//        if(i==1){
-//            Missile *_bullet= new Missile(this,Qt::blue);
-//            _municao.push_back(_bullet);
-//        }
-//        if(i==2){
-//            Missile *_bullet= new Missile(this,Qt::green);
-//            _municao.push_back(_bullet);
-//        }
-//        if(i==3){
-//            Missile *_bullet= new Missile(this,Qt::yellow);
-//            _municao.push_back(_bullet);
-//        }
-//        if(i==4){
-//            Missile *_bullet= new Missile(this,Qt::magenta);
-//            _municao.push_back(_bullet);
-//        }
-         _municao.push_back(_bullet);
+        //        if(i==0){
+        //            Missile *_bullet= new Missile(this,Qt::red);
+        //            _municao.push_back(_bullet);
+        //        }
+        //        if(i==1){
+        //            Missile *_bullet= new Missile(this,Qt::blue);
+        //            _municao.push_back(_bullet);
+        //        }
+        //        if(i==2){
+        //            Missile *_bullet= new Missile(this,Qt::green);
+        //            _municao.push_back(_bullet);
+        //        }
+        //        if(i==3){
+        //            Missile *_bullet= new Missile(this,Qt::yellow);
+        //            _municao.push_back(_bullet);
+        //        }
+        //        if(i==4){
+        //            Missile *_bullet= new Missile(this,Qt::magenta);
+        //            _municao.push_back(_bullet);
+        //        }
+        _municao.push_back(_bullet);
     }
-   // qDebug()<<_municao.size();
+    // qDebug()<<_municao.size();
 
     for(int i=0;i<5;i++){
-       // qDebug()<<_municao.at(i)->getActive();
+        // qDebug()<<_municao.at(i)->getActive();
     }
 
 
@@ -62,14 +68,69 @@ void Player::draw(QPainter &p){
         p.drawRoundedRect(_x,_y,_w_sz,_h_sz,2.5,2.5);
         _qtd_print ++;
     }else{
-//        for(int i=0;i<5;i++){
-//           this->getBala(i)->setActive(false);
-//        }
+        //        for(int i=0;i<5;i++){
+        //           this->getBala(i)->setActive(false);
+        //        }
 
         //this->getBala(this->getQtdFire())->setQtdTiro(10);
     }
+    for(int i=1;i<6;i++){
 
-    if(_Qtd_fire >=0){  
+        _raio = _h_sz/3.5;
+        _rad = _gr * i * (M_PI/180);
+        _bx = cos(_rad)*_raio+_x+_w_sz/2.5;
+        _by = sin(_rad)*_raio +_y+_h_sz/2.5;
+      //  if(_qtd_print == 10){
+
+            if(this->getColor() == Qt::white){
+                qDebug()<< _bx<<_by<<_w_sz*0.3<<_h_sz*0.2;
+                p.setBrush(Qt::black);
+                p.setPen(Qt::black);
+                p.drawEllipse(_bx,_by,_w_sz*0.3,_h_sz*0.2);
+            }
+            if(this->getColor() == Qt::black){
+                p.setBrush(Qt::white);
+                p.setPen(Qt::white);
+                p.drawEllipse(_bx,_by,_w_sz*0.3,_h_sz*0.2);
+            }
+
+
+
+        //}
+    }
+    if(_qtd_print ==10){
+        _gr+=72;
+        _qtd_print =0;
+    }
+
+
+
+    // abaixo teste funcionando
+//    _raio = _h_sz/3.5;
+//    _rad = _gr * (M_PI/180);
+//    _rad_2 = _gr_2 * (M_PI/180);
+//    _bx = cos(_rad)*_raio+_x+_w_sz/2.5;
+//    _by = sin(_rad)*_raio +_y+_h_sz/2.5;
+//    _bx_2 = cos(_rad_2)*_raio+_x+_w_sz/2.5;
+//    _by_2 = sin(_rad_2)*_raio +_y+_h_sz/2.5;
+//    if(this->getColor() == Qt::white){
+//        p.setBrush(Qt::black);
+//        p.setPen(Qt::black);
+//        p.drawEllipse(_bx,_by,_w_sz*0.3,_h_sz*0.2);
+//        p.drawEllipse(_bx_2,_by_2,_w_sz*0.3,_h_sz*0.2);
+//    }
+//    if(this->getColor() == Qt::black){
+//        p.setBrush(Qt::white);
+//        p.setPen(Qt::white);
+//        p.drawEllipse(_bx,_by,_w_sz*0.3,_h_sz*0.2);
+//        p.drawEllipse(_bx,_by,_w_sz*0.3,_h_sz*0.2);
+//    }
+//    _gr+=7;
+//    _gr_2 +=7;
+//    // fim teste animação dentro player
+
+
+    if(_Qtd_fire >=0){
         for(int i=0;i<5;i++){
             if(_municao.at(i)->getActive()){
                 _municao.at(i)->draw(p);
@@ -154,8 +215,8 @@ Missile* Player::getBala(int index)
             return _municao.at(index);
         }
         else{
-              qDebug()<<"else: ";
-            }
+            qDebug()<<"else: ";
+        }
     }
 
 
