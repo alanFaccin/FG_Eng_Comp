@@ -2,6 +2,7 @@
 #include <QPainter>
 #include <QDebug>
 #include <QTimer>
+#include <QApplication>
 #include "missile.h"
 
 int _bx = 1;
@@ -44,10 +45,10 @@ Player::Player(QFrame *parent, const QColor color, int x, int y){
 //        }
          _municao.push_back(_bullet);
     }
-    qDebug()<<_municao.size();
+   // qDebug()<<_municao.size();
 
     for(int i=0;i<5;i++){
-        qDebug()<<_municao.at(i)->getActive();
+       // qDebug()<<_municao.at(i)->getActive();
     }
 
 
@@ -61,17 +62,16 @@ void Player::draw(QPainter &p){
         p.drawRoundedRect(_x,_y,_w_sz,_h_sz,2.5,2.5);
         _qtd_print ++;
     }else{
-        //this->getBala(this->getQtdFire())->setActive(false);
+//        for(int i=0;i<5;i++){
+//           this->getBala(i)->setActive(false);
+//        }
+
         //this->getBala(this->getQtdFire())->setQtdTiro(10);
     }
 
-    qDebug()<<_Qtd_fire;
-    if(_Qtd_fire >=0){
-          qDebug()<<"Alan";
+    if(_Qtd_fire >=0){  
         for(int i=0;i<5;i++){
-
             if(_municao.at(i)->getActive()){
-
                 _municao.at(i)->draw(p);
             }
         }
@@ -148,9 +148,17 @@ void Player::resetfire()
 
 Missile* Player::getBala(int index)
 {
-    if(!(_municao.isEmpty())){
-        return _municao.at(index);
+    qDebug()<<"index: "<<index;
+    if(this->getActive()){
+        if(index<5 && index >=0 ){
+            return _municao.at(index);
+        }
+        else{
+              qDebug()<<"else: ";
+            }
     }
+
+
 }
 
 void Player::removeBala()
