@@ -21,7 +21,10 @@ public:
     int Colision_cenario();
     void colision_Special_bullet();
     void movePalyer();
+    void atualizaPosition();
     Missile * getSpecial(int index);
+    void Colision_Missile_Scenary();
+    void generateSpecialFire(QPainter& p);
 
     // time animation improved
     qint64 _last_time_60fps;

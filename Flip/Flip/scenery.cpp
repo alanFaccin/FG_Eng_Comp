@@ -468,11 +468,6 @@ int Scenary::Colision_Missile_Scenary_black(Missile *_t)
 
                 if(RectColors[i][j] == preto){
 
-                    //                    qDebug()<< _t->getX()+_t->get_w_sz() << ">="<<(RectPos[i][j].x())
-                    //                            << (_t->getX())<<"<="<<(RectPos[i][j].x()+_w_sz)
-                    //                            << (_t->getY() + _t->get_h_sz())<< ">=" <<(RectPos[i][j].y())
-                    //                            << (_t->getY())<< "<="<< (RectPos[i][j].y()+_h_sz);
-
                     if((_t->getX()+_t->get_w_sz())>=(RectPos[i][j].x()) &&
                             (_t->getX())<=(RectPos[i][j].x()+_w_sz) &&
                             (_t->getY() + _t->get_h_sz()) >= (RectPos[i][j].y()) &&
@@ -499,20 +494,10 @@ int Scenary::Colision_Missile_Scenary_black(Missile *_t)
                             (_t->getY() + _t->get_h_sz()) >= (RectPos[i][j].y()) &&
                             (_t->getY())<= (RectPos[i][j].y()+_h_sz))  {
 
-                        _t->setActive(false);
+                        //_t->setActive(false);
 
-
-                        for(int m=0;m<_p1->getMunicao().size();m++){
-                            if(!(_p1->getMunicao().at(m)->getActive())){
-                                _p1->getMunicao().remove(m);
-                            }
-                        }
-                        qDebug()<<"qtd municao normal: " <<_p1->getMunicao().size();
-
-                        //teste
-
-                        // _t->setX(-5000);
-                        // _t->setY(-5000);
+                         _t->setX(-5000);
+                         _t->setY(-5000);
 
                         return 1;
 
@@ -597,7 +582,6 @@ int Scenary::Colision_Missile_Scenary_white(Missile *_t)
 
                     for(int i=0;i<_Rows;i++){
                         for(int j=0;j<_Col;j++){
-                            //qDebug()<<RectColors[i][j];
                             RectColors[i][j] = preto;
                         }
                     }
@@ -665,11 +649,6 @@ void Scenary::colision_Special_bullet()
 
         for(int i =0;i<_special.size();i++){
             if(_special.at(i)->getActive()){
-
-                //                qDebug()<< (_p1->getX()+_p1->getW_size())<<">="<<_special.at(i)->getX()
-                //                        <<(_p1->getX()+salto)<<"<="<<(_special.at(i)->getX()+_special.at(i)->get_w_sz())
-                //                       <<(_p1->getY() + _p1->getH_size()) << ">=" << (_special.at(i)->getY())
-                //                      <<(_p1->getY()) + salto << "<=" << (_special.at(i)->getY()+_special.at(i)->get_h_sz());
 
                 if((_p1->getX()+_p1->getW_size())>=(_special.at(i)->getX()) &&
                         (_p1->getX())<=(_special.at(i)->getX()+_special.at(i)->get_w_sz()) &&
@@ -824,6 +803,20 @@ void Scenary::movePalyer()
 
 }
 
+void Scenary::atualizaPosition()
+{
+    _x = _y = 0;
+    _w_sz = width()/_Col;
+    _h_sz = height()/_Rows;
+
+    // atualiza a porcentagem x e y atual na janela
+    pos_x_atua_p1 = (float) _p1->getX()/width();
+    pos_y_atua_p1 = (float) _p1->getY()/height();
+
+    pos_x_atua_p2 = (float) _p2->getX()/width();
+    pos_y_atua_p2 = (float) _p2->getY()/height();
+}
+
 void Scenary::_tick()
 {
 
@@ -838,7 +831,13 @@ void Scenary::_tick()
             _accumulator60 -= _constant_dt;
         }
 
-        this->draw();
+        //inicio
+        atualizaPosition();
+        Colision_cenario();
+        Colision_Missile_Scenary();
+        colision_Special_bullet();
+        movePalyer();
+        draw();
         // acumula qtd vezes que passou aqui
         _cont_t++;
 
@@ -848,8 +847,6 @@ void Scenary::_tick()
     _counter++;
     _counter = _counter % 60;
 
-    //qDebug()<<"tick";
-
     // Reset the timer
     QTimer::singleShot(1000/_max_fps, this, SLOT(_tick()));
 }
@@ -857,22 +854,11 @@ void Scenary::_tick()
 void Scenary::paintEvent(QPaintEvent *event)
 {
     QFrame::paintEvent(event);
-
     QPainter painter(this);
-
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setPen(Qt::gray);
-    _x = _y = 0;
-    _w_sz = width()/_Col;
-    _h_sz = height()/_Rows;
 
-    // atualiza a porcentagem x e y atual na janela
-    pos_x_atua_p1 = (float) _p1->getX()/width();
-    pos_y_atua_p1 = (float) _p1->getY()/height();
-
-    pos_x_atua_p2 = (float) _p2->getX()/width();
-    pos_y_atua_p2 = (float) _p2->getY()/height();
-
+    //draw tabuleiro
     for(int i=0;i<_Rows;i++){
         for(int j=0;j<_Col;j++){
 
@@ -896,91 +882,10 @@ void Scenary::paintEvent(QPaintEvent *event)
 
 
     //draw player
-    this->Colision_cenario();
-    colision_Special_bullet();
-
-    if(_p1->getQtdFire()>=0){
-        if(_p1->getActive()){
-
-            for(int i=0;i<5;i++){
-
-                if(_p1->getBala(i)->getActive()){
-
-                    Colision_Missile_Scenary_white(_p1->getBala(i));
-
-                }
-
-            }
-        }
-    }
-    if(_p2->getQtdFire()>=0){
-        if(_p2->getActive()){
-            for(int i=0;i<5;i++){
-
-                if(_p2->getBala(i)->getActive()){
-
-                    Colision_Missile_Scenary_black(_p2->getBala(i));
-                }
-
-            }
-        }
-    }
-
-
     _p1->draw(painter);
     _p2->draw(painter);
-
-
-
-    // imprime um tiro especial no cenário
-    if(_cont_t == 150){
-
-        // qDebug()<<_special.size();
-        if(_special.size()<5){
-            Missile *_fs = new Missile(this,Qt::blue);
-            _fs->setX(rand() % 799 + 0);
-            _fs->setY(rand() % 600 + 0);
-
-            _fs->setActive(true);
-            _special.push_back(_fs);
-
-        }
-
-    }
-    if(_cont_t == 300){
-
-        //qDebug()<<_special.size();
-        if(_special.size()<5){
-            Missile *_fs = new Missile(this,Qt::red);
-            _fs->setX(rand() % 600 + 0);
-            _fs->setY(rand() % 400 + 0);
-
-            _fs->setActive(true);
-            _special.push_back(_fs);
-
-        }
-        _cont_t =0;
-    }
-
-    for(int i =0;i<_special.size();i++){
-        if(_special.at(i)->getActive()){
-            for(int r=0;r<_Rows;r++){
-                for(int l=0;l<_Col;l++){
-
-                    if(RectColors[r][l] == branco || RectColors[r][l] == preto){
-                        if((_special.at(i)->getX()+_special.at(i)->get_w_sz())>=(RectPos[r][l].x()) &&
-                                (_special.at(i)->getX())<=(RectPos[r][l].x()+_w_sz) &&
-                                (_special.at(i)->getY() + _special.at(i)->get_h_sz()) >= (RectPos[r][l].y()) &&
-                                (_special.at(i)->getY())<= (RectPos[r][l].y()+_h_sz))  {
-
-                            _special.at(i)->draw(painter);
-
-                        }
-                    }
-                }
-            }
-        }
-    }
+    //draw special fire
+    generateSpecialFire(painter);
 }
 
 void Scenary::keyPressEvent(QKeyEvent *event)
@@ -1021,55 +926,48 @@ void Scenary::keyPressEvent(QKeyEvent *event)
         break;
     case Qt::Key_Space:
         if(_p1->getQtdFire()<4){
-            //qDebug()<<"space"<<_p1->getQtdFire();
-            //set direction
             _p1->addFire();
             if(tecla_b == Qt::Key_Up){
-                _p1->getBala(_p1->getQtdFire())->setX(_p1->getX()+(_p1->getW_size()/2)-(_p1->getBala(_p1->getQtdFire())->get_h_sz()/2));
-                _p1->getBala(_p1->getQtdFire())->setY(_p1->getY()- _p1->getBala(_p1->getQtdFire())->get_h_sz());
-                _p1->getBala(_p1->getQtdFire())->setDirection('u');
+                _p1->getBullet(_p1->getQtdFire())->setX(_p1->getX()+(_p1->getW_size()/2)-(_p1->getBullet(_p1->getQtdFire())->get_h_sz()/2));
+                _p1->getBullet(_p1->getQtdFire())->setY(_p1->getY()- _p1->getBullet(_p1->getQtdFire())->get_h_sz());
+                _p1->getBullet(_p1->getQtdFire())->setDirection('u');
             }
             if(tecla_b == Qt::Key_Down){
-                _p1->getBala(_p1->getQtdFire())->setX(_p1->getX()+(_p1->getW_size()/2)-(_p1->getBala(_p1->getQtdFire())->get_h_sz()/2));
-                _p1->getBala(_p1->getQtdFire())->setY(_p1->getY()+_p1->getH_size());
-                _p1->getBala(_p1->getQtdFire())->setDirection('d');
+                _p1->getBullet(_p1->getQtdFire())->setX(_p1->getX()+(_p1->getW_size()/2)-(_p1->getBullet(_p1->getQtdFire())->get_h_sz()/2));
+                _p1->getBullet(_p1->getQtdFire())->setY(_p1->getY()+_p1->getH_size());
+                _p1->getBullet(_p1->getQtdFire())->setDirection('d');
             }
             if(tecla_b == Qt::Key_Right){
-                _p1->getBala(_p1->getQtdFire())->setX(_p1->getX()+_p1->getW_size());
-                _p1->getBala(_p1->getQtdFire())->setY(_p1->getY()+(_p1->getH_size())/2-(_p1->getBala(_p1->getQtdFire())->get_h_sz()/2));
-                _p1->getBala(_p1->getQtdFire())->setDirection('r');
+                _p1->getBullet(_p1->getQtdFire())->setX(_p1->getX()+_p1->getW_size());
+                _p1->getBullet(_p1->getQtdFire())->setY(_p1->getY()+(_p1->getH_size())/2-(_p1->getBullet(_p1->getQtdFire())->get_h_sz()/2));
+                _p1->getBullet(_p1->getQtdFire())->setDirection('r');
             }
             if(tecla_b == Qt::Key_Left){
-                _p1->getBala(_p1->getQtdFire())->setX(_p1->getX()-_p1->getBala(_p1->getQtdFire())->get_w_sz());
-                _p1->getBala(_p1->getQtdFire())->setY(_p1->getY()+(_p1->getH_size())/2-(_p1->getBala(_p1->getQtdFire())->get_h_sz()/2));
-                _p1->getBala(_p1->getQtdFire())->setDirection('l');
+                _p1->getBullet(_p1->getQtdFire())->setX(_p1->getX()-_p1->getBullet(_p1->getQtdFire())->get_w_sz());
+                _p1->getBullet(_p1->getQtdFire())->setY(_p1->getY()+(_p1->getH_size())/2-(_p1->getBullet(_p1->getQtdFire())->get_h_sz()/2));
+                _p1->getBullet(_p1->getQtdFire())->setDirection('l');
             }
 
             //start fire
 
-            if(_p1->getBala(_p1->getQtdFire())->getQtdTiro()<=5 && tecla_b != NULL){
-                _p1->getBala(_p1->getQtdFire())->setActive(true);
-                if(_p1->getBala(_p1->getQtdFire())->getFireSound()->state() == QMediaPlayer::PlayingState ){
-                    _p1->getBala(_p1->getQtdFire())->getFireSound()->setPosition(0);
-                }else if (_p1->getBala(_p1->getQtdFire())->getFireSound()->state() == QMediaPlayer::StoppedState){
-                    _p1->getBala(_p1->getQtdFire())->getFireSound()->play();
+            if(_p1->getBullet(_p1->getQtdFire())->getQtdTiro()<=5 && tecla_b != NULL){
+                _p1->getBullet(_p1->getQtdFire())->setActive(true);
+                if(_p1->getBullet(_p1->getQtdFire())->getFireSound()->state() == QMediaPlayer::PlayingState ){
+                    _p1->getBullet(_p1->getQtdFire())->getFireSound()->setPosition(0);
+                }else if (_p1->getBullet(_p1->getQtdFire())->getFireSound()->state() == QMediaPlayer::StoppedState){
+                    _p1->getBullet(_p1->getQtdFire())->getFireSound()->play();
                 }
 
-                _p1->getBala(_p1->getQtdFire())->addTiro();
+                _p1->getBullet(_p1->getQtdFire())->addTiro();
 
 
-            }else{
-                //_p1->getBala(_p1->getQtdFire())->resetTiro();
             }
-
         }
         break;
 
     case Qt::Key_M:
         _p1->addSpecialFire();
         if(tecla_b == Qt::Key_Up){
-            // qDebug()<<_p1->getQtdSpecialFire();
-            //qDebug()<<_p1->getSpecialBullet(0);
             _p1->getSpecialBullet(_p1->getQtdSpecialFire())->setX(_p1->getX()+(_p1->getW_size()/2)-(_p1->getSpecialBullet(_p1->getQtdSpecialFire())->get_h_sz()/2));
             _p1->getSpecialBullet(_p1->getQtdSpecialFire())->setY(_p1->getY()- _p1->getSpecialBullet(_p1->getQtdSpecialFire())->get_h_sz());
             _p1->getSpecialBullet(_p1->getQtdSpecialFire())->setDirection('u');
@@ -1080,8 +978,6 @@ void Scenary::keyPressEvent(QKeyEvent *event)
             _p1->getSpecialBullet(_p1->getQtdSpecialFire())->setDirection('d');
         }
         if(tecla_b == Qt::Key_Right){
-            //qDebug()<<"right";
-            //qDebug()<< _p1->getQtdSpecialFire();
             _p1->getSpecialBullet(_p1->getQtdSpecialFire())->setY(_p1->getY()+(_p1->getH_size())/2-(_p1->getSpecialBullet(_p1->getQtdSpecialFire())->get_h_sz()/2));
             _p1->getSpecialBullet(_p1->getQtdSpecialFire())->setX(_p1->getX()+_p1->getW_size()+3);
             _p1->getSpecialBullet(_p1->getQtdSpecialFire())->setDirection('r');
@@ -1108,42 +1004,40 @@ void Scenary::keyPressEvent(QKeyEvent *event)
             //set direction
             _p2->addFire();
             if(tecla_p == Qt::Key_W){
-                _p2->getBala(_p2->getQtdFire())->setX(_p2->getX()+(_p2->getW_size()/2)-(_p2->getBala(_p2->getQtdFire())->get_h_sz()/2));
-                _p2->getBala(_p2->getQtdFire())->setY(_p2->getY()- _p2->getBala(_p2->getQtdFire())->get_h_sz());
-                _p2->getBala(_p2->getQtdFire())->setDirection('u');
+                _p2->getBullet(_p2->getQtdFire())->setX(_p2->getX()+(_p2->getW_size()/2)-(_p2->getBullet(_p2->getQtdFire())->get_h_sz()/2));
+                _p2->getBullet(_p2->getQtdFire())->setY(_p2->getY()- _p2->getBullet(_p2->getQtdFire())->get_h_sz());
+                _p2->getBullet(_p2->getQtdFire())->setDirection('u');
             }
             if(tecla_p == Qt::Key_S){
-                _p2->getBala(_p2->getQtdFire())->setX(_p2->getX()+(_p2->getW_size()/2)-(_p2->getBala(_p2->getQtdFire())->get_h_sz()/2));
-                _p2->getBala(_p2->getQtdFire())->setY(_p2->getY()+_p2->getH_size());
-                _p2->getBala(_p2->getQtdFire())->setDirection('d');
+                _p2->getBullet(_p2->getQtdFire())->setX(_p2->getX()+(_p2->getW_size()/2)-(_p2->getBullet(_p2->getQtdFire())->get_h_sz()/2));
+                _p2->getBullet(_p2->getQtdFire())->setY(_p2->getY()+_p2->getH_size());
+                _p2->getBullet(_p2->getQtdFire())->setDirection('d');
             }
             if(tecla_p == Qt::Key_D){
-                _p2->getBala(_p2->getQtdFire())->setX(_p2->getX()+_p2->getW_size());
-                _p2->getBala(_p2->getQtdFire())->setY(_p2->getY()+(_p2->getH_size())/2-(_p2->getBala(_p2->getQtdFire())->get_h_sz()/2));
-                _p2->getBala(_p2->getQtdFire())->setDirection('r');
+                _p2->getBullet(_p2->getQtdFire())->setX(_p2->getX()+_p2->getW_size());
+                _p2->getBullet(_p2->getQtdFire())->setY(_p2->getY()+(_p2->getH_size())/2-(_p2->getBullet(_p2->getQtdFire())->get_h_sz()/2));
+                _p2->getBullet(_p2->getQtdFire())->setDirection('r');
             }
             if(tecla_p == Qt::Key_A){
-                _p2->getBala(_p2->getQtdFire())->setX(_p2->getX()-_p2->getBala(_p2->getQtdFire())->get_w_sz());
-                _p2->getBala(_p2->getQtdFire())->setY(_p2->getY()+(_p2->getH_size())/2-(_p2->getBala(_p2->getQtdFire())->get_h_sz()/2));
-                _p2->getBala(_p2->getQtdFire())->setDirection('l');
+                _p2->getBullet(_p2->getQtdFire())->setX(_p2->getX()-_p2->getBullet(_p2->getQtdFire())->get_w_sz());
+                _p2->getBullet(_p2->getQtdFire())->setY(_p2->getY()+(_p2->getH_size())/2-(_p2->getBullet(_p2->getQtdFire())->get_h_sz()/2));
+                _p2->getBullet(_p2->getQtdFire())->setDirection('l');
             }
 
             //start fire
 
-            if(_p2->getBala(_p2->getQtdFire())->getQtdTiro()<=5 && tecla_p != NULL){
-                _p2->getBala(_p2->getQtdFire())->setActive(true);
+            if(_p2->getBullet(_p2->getQtdFire())->getQtdTiro()<=5 && tecla_p != NULL){
+                _p2->getBullet(_p2->getQtdFire())->setActive(true);
 
-                if(_p2->getBala(_p2->getQtdFire())->getFireSound()->state() == QMediaPlayer::PlayingState ){
-                    _p2->getBala(_p2->getQtdFire())->getFireSound()->setPosition(0);
-                }else if (_p2->getBala(_p2->getQtdFire())->getFireSound()->state() == QMediaPlayer::StoppedState){
-                    _p2->getBala(_p2->getQtdFire())->getFireSound()->play();
+                if(_p2->getBullet(_p2->getQtdFire())->getFireSound()->state() == QMediaPlayer::PlayingState ){
+                    _p2->getBullet(_p2->getQtdFire())->getFireSound()->setPosition(0);
+                }else if (_p2->getBullet(_p2->getQtdFire())->getFireSound()->state() == QMediaPlayer::StoppedState){
+                    _p2->getBullet(_p2->getQtdFire())->getFireSound()->play();
                 }
 
-                _p2->getBala(_p2->getQtdFire())->addTiro();
+                _p2->getBullet(_p2->getQtdFire())->addTiro();
 
 
-            }else{
-                //_p1->getBala(_p1->getQtdFire())->resetTiro();
             }
 
         }
@@ -1152,7 +1046,6 @@ void Scenary::keyPressEvent(QKeyEvent *event)
 
 
     }
-    movePalyer();
 }
 
 void Scenary::keyReleaseEvent(QKeyEvent *event) {
@@ -1183,25 +1076,15 @@ void Scenary::keyReleaseEvent(QKeyEvent *event) {
         case Qt::Key_S:
             keyS = false;
             break;
-        case Qt::Key_Space:
-            //           qDebug()<<"soltou o space bar";
-            //            _p1->setFire(false);
-            break;
 
         }
     }
-    //    // atualiza as coordenadas de movimentação de acordo com as teclas pressionadas
-    movePalyer();
-    //    //repintar a tela
-    //repaint();
 }
 
 void Scenary::resizeEvent(QResizeEvent *event)
 {
     QFrame::resizeEvent(event);
 
-    //    //qDebug()<< width();
-    //    //qDebug()<< height();
     // atualiza tamanho dos quadrados tabuleiro
     _x = _y = 0;
     _w_sz = width()/_Col;
@@ -1230,4 +1113,90 @@ Missile *Scenary::getSpecial(int index)
 
     //        return _special.at(index);
     //    }
+}
+
+void Scenary::Colision_Missile_Scenary()
+{
+    if(_p1->getQtdFire()>=0){
+        if(_p1->getActive()){
+
+            for(int i=0;i<5;i++){
+
+                if(_p1->getBullet(i)->getActive()){
+
+                    Colision_Missile_Scenary_white(_p1->getBullet(i));
+
+                }
+
+            }
+        }
+    }
+    if(_p2->getQtdFire()>=0){
+        if(_p2->getActive()){
+            for(int i=0;i<5;i++){
+
+                if(_p2->getBullet(i)->getActive()){
+
+                    Colision_Missile_Scenary_black(_p2->getBullet(i));
+                }
+
+            }
+        }
+    }
+}
+
+void Scenary::generateSpecialFire(QPainter &p)
+{
+    if(_p1->getActive() && _p2->getActive()){
+        if(_cont_t == 150){
+
+            if(_special.size()<5){
+                Missile *_fs = new Missile(this,Qt::blue);
+                _fs->setX(rand() % 799 + 0);
+                _fs->setY(rand() % 600 + 0);
+
+                _fs->setActive(true);
+                _special.push_back(_fs);
+            }
+
+        }
+        if(_cont_t == 300){
+
+            //qDebug()<<_special.size();
+            if(_special.size()<5){
+                Missile *_fs = new Missile(this,Qt::red);
+                _fs->setX(rand() % 600 + 0);
+                _fs->setY(rand() % 400 + 0);
+
+                _fs->setActive(true);
+                _special.push_back(_fs);
+            }
+            _cont_t =0;
+        }
+
+        for(int i =0;i<_special.size();i++){
+            if(_special.at(i)->getActive()){
+                for(int r=0;r<_Rows;r++){
+                    for(int l=0;l<_Col;l++){
+
+                        if(RectColors[r][l] == branco || RectColors[r][l] == preto){
+                            if((_special.at(i)->getX()+_special.at(i)->get_w_sz())>=(RectPos[r][l].x()) &&
+                                    (_special.at(i)->getX())<=(RectPos[r][l].x()+_w_sz) &&
+                                    (_special.at(i)->getY() + _special.at(i)->get_h_sz()) >= (RectPos[r][l].y()) &&
+                                    (_special.at(i)->getY())<= (RectPos[r][l].y()+_h_sz))  {
+
+                                _special.at(i)->draw(p);
+
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }else{
+        for(int i =0;i<_special.size();i++){
+             _special.at(i)->setActive(false);
+        }
+    }
+
 }

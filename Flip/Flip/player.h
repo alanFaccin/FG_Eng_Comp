@@ -26,7 +26,7 @@ public:
     void addFire();
     void removeFire();
     void resetfire();
-    Missile* getBala(int index);
+    Missile* getBullet(int index);
     void removeBullet(int index);
     void setActive(bool act);
     bool getActive();

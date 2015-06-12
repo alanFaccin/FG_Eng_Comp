@@ -6,15 +6,14 @@
 #include <math.h>
 #include "missile.h"
 
-double _bx = 0,_bx_2 = 0;
-double _by = 0,_by_2 = 0;
-double _rad = 0,_rad_2= 0;
+double _bx = 0;
+double _by = 0;
+double _rad = 0;
 double _raio = 0;
 int _gr = 72,_gr_2 = 72;
 
 
 int _cont = 0;
-int _qtd_print = 0;
 
 Player::Player(QFrame *parent, const QColor color, int x, int y){
 
@@ -30,34 +29,8 @@ Player::Player(QFrame *parent, const QColor color, int x, int y){
 
     for(int i=0;i<5;i++){
         Missile *_bullet= new Missile(this,this->_color);
-        //        if(i==0){
-        //            Missile *_bullet= new Missile(this,Qt::red);
-        //            _municao.push_back(_bullet);
-        //        }
-        //        if(i==1){
-        //            Missile *_bullet= new Missile(this,Qt::blue);
-        //            _municao.push_back(_bullet);
-        //        }
-        //        if(i==2){
-        //            Missile *_bullet= new Missile(this,Qt::green);
-        //            _municao.push_back(_bullet);
-        //        }
-        //        if(i==3){
-        //            Missile *_bullet= new Missile(this,Qt::yellow);
-        //            _municao.push_back(_bullet);
-        //        }
-        //        if(i==4){
-        //            Missile *_bullet= new Missile(this,Qt::magenta);
-        //            _municao.push_back(_bullet);
-        //        }
         _municao.push_back(_bullet);
     }
-    // qDebug()<<_municao.size();
-
-    for(int i=0;i<5;i++){
-        // qDebug()<<_municao.at(i)->getActive();
-    }
-
 
 }
 
@@ -67,9 +40,6 @@ void Player::draw(QPainter &p){
         p.setPen(_color);
         p.setBrush(_color);
         p.drawRoundedRect(_x,_y,_w_sz,_h_sz,2.5,2.5);
-        _qtd_print ++;
-
-
 
         if(this->getColor() == Qt::white){
 
@@ -97,18 +67,7 @@ void Player::draw(QPainter &p){
                     _gr+=72;
                     _gr %=370;
 
-
-
             }
-            //qDebug()<<_qtd_print;
-//            if(_qtd_print == 21){
-//                _gr+=34;
-//                _qtd_print = 1;
-//            }
-
-
-
-
 
             if(_Qtd_fire >=0){
                 for(int i=0;i<5;i++){
@@ -120,7 +79,6 @@ void Player::draw(QPainter &p){
             if(_Qtd_specialFire >=0){
                 for(int i=0;i<_municao_special.size();i++){
                     if(_municao_special.at(i)->getActive()){
-                        //qDebug()<<"ativo desenhar";
                         _municao_special.at(i)->draw(p);
                     }
                 }
@@ -147,16 +105,6 @@ void Player::draw(QPainter &p){
 
             }
 
-//            //qDebug()<<_qtd_print;
-//            if(_qtd_print == 21){
-//                _gr+=34;
-//                _qtd_print = 1;
-//            }
-
-
-
-
-
             if(_Qtd_fire >=0){
                 for(int i=0;i<5;i++){
                     if(_municao.at(i)->getActive()){
@@ -165,8 +113,6 @@ void Player::draw(QPainter &p){
                 }
             }
         }
-
-
 
     }
 
@@ -240,17 +186,13 @@ void Player::resetfire()
     _Qtd_fire = 0;
 }
 
-Missile* Player::getBala(int index)
+Missile* Player::getBullet(int index)
 {
-    //qDebug()<<"index: "<<index;
     if(this->getActive()){
         if(index<5 && index >=0 ){
             return _municao.at(index);
         }
-        else{
-            // qDebug()<<"else: ";
-        }
-    }
+      }
 
 
 }
@@ -274,8 +216,7 @@ bool Player::getActive()
 void Player::addSpecialBullet(Missile *bullet)
 {
     this->_municao_special.push_back(bullet);
-    //this->_Qtd_specialFire++;
-    //qDebug()<<"Size special:"<<_municao_special.size();
+
 }
 
 Missile *Player::getSpecialBullet(int index)
