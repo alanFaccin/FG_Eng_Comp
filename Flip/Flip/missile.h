@@ -31,6 +31,7 @@ public:
 
 private slots:
     void move();
+    void moveRed();
 
 private:
     QColor _color;

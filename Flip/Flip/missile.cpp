@@ -24,27 +24,34 @@ void Missile::draw(QPainter &p)
 
         if(_active && _qtd_tiro <= 5){
 
-          //teste -=1;
-          p.setPen(_color);
-          p.setBrush(_color);
-          p.drawRect(_x,_y,_w_sz,_h_sz);
+          if(this->getColor() == Qt::blue){
 
-          move();
+              p.setPen(_color);
+              p.setBrush(_color);
+              p.drawRect(_x,_y,_w_sz*2,_h_sz*2);
+              move();
+
+          }else if(this->getColor() == Qt::red){
+              //qDebug()<<"vermelha";
+              p.setPen(_color);
+              p.setBrush(_color);
+              p.drawRect(_x,_y,_w_sz,_h_sz);
+              moveRed();
+          }else{
+              p.setPen(_color);
+              p.setBrush(_color);
+              p.drawRect(_x,_y,_w_sz,_h_sz);
+              move();
+          }
+
+//          p.setPen(_color);
+//          p.setBrush(_color);
+//          p.drawRect(_x,_y,_w_sz,_h_sz);
+
+//          move();
         }else{
            // _active = false;
         }
-
-//    p.setPen(_color);
-//    p.setBrush(Qt::red);
-//    p.drawRect(_x,_y,_w_sz,_h_sz);
-//    //p.drawRect(300,300,20,20);
-//    qDebug()<< "draw do missel" ;
-//    move();
-    //QTimer::singleShot(10, this, SLOT(move()));
-
-    //    QTimer *timer_bullet = new QTimer();
-    //    QObject::connect(timer_bullet,SIGNAL(timeout()),this,SLOT(move()));
-    //    timer_bullet->start(1000);
 
 
 }
@@ -134,6 +141,24 @@ void Missile::move()
     }
     //qDebug()<<"move";
     //QTimer::singleShot(10, this, SLOT(move()));
+}
+
+void Missile::moveRed()
+{
+
+    if(_direction == 'u'){
+        _y -=20;
+    }
+    if(_direction == 'd'){
+       // qDebug()<<"_direction == 'd'";
+        _y +=20;
+    }
+    if(_direction == 'r'){
+        _x +=20;
+    }
+    if(_direction == 'l'){
+        _x -=20;
+    }
 }
 void Missile::setQtdTiro(int t)
 {

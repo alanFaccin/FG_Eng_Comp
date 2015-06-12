@@ -72,7 +72,7 @@ Scenary::Scenary(QWidget *parent)
     _bg_music->setMedia(QUrl("qrc:/sounds/sounds/bg_music.mp3"));
     //qDebug()<<_bg_music->mediaStatus();
     _bg_music->play();
-   // qDebug()<<_bg_music->mediaStatus();
+    // qDebug()<<_bg_music->mediaStatus();
     // sound colision
     _colision_music = new QMediaPlayer();
     _colision_music->setMedia(QUrl("qrc:/sounds/sounds/c_tab.wav"));
@@ -500,8 +500,19 @@ int Scenary::Colision_Missile_Scenary_black(Missile *_t)
                             (_t->getY())<= (RectPos[i][j].y()+_h_sz))  {
 
                         _t->setActive(false);
-                        _t->setX(1000);
-                        _t->setY(1000);
+
+
+                        for(int m=0;m<_p1->getMunicao().size();m++){
+                            if(!(_p1->getMunicao().at(m)->getActive())){
+                                _p1->getMunicao().remove(m);
+                            }
+                        }
+                        qDebug()<<"qtd municao normal: " <<_p1->getMunicao().size();
+
+                        //teste
+
+                        // _t->setX(-5000);
+                        // _t->setY(-5000);
 
                         return 1;
 
@@ -516,7 +527,7 @@ int Scenary::Colision_Missile_Scenary_black(Missile *_t)
 
                     for(int i=0;i<_Rows;i++){
                         for(int j=0;j<_Col;j++){
-                            // RectColors[i][j] = branco;
+                            RectColors[i][j] = branco;
                             _p1->setActive(false);
                         }
                     }
@@ -567,7 +578,11 @@ int Scenary::Colision_Missile_Scenary_white(Missile *_t)
                             (_t->getY())<= (RectPos[i][j].y()+_h_sz))  {
 
 
-                        _t->setActive(false);
+                        //_t->setActive(false);
+
+                        //teste
+                        _t->setX(-5000);
+                        _t->setY(-5000);
 
                         return 1;
 
@@ -657,12 +672,12 @@ void Scenary::colision_Special_bullet()
                 //                      <<(_p1->getY()) + salto << "<=" << (_special.at(i)->getY()+_special.at(i)->get_h_sz());
 
                 if((_p1->getX()+_p1->getW_size())>=(_special.at(i)->getX()) &&
-                        (_p1->getX()+salto)<=(_special.at(i)->getX()+_special.at(i)->get_w_sz()) &&
+                        (_p1->getX())<=(_special.at(i)->getX()+_special.at(i)->get_w_sz()) &&
                         (_p1->getY() + _p1->getH_size()) >= (_special.at(i)->getY()) &&
-                        (_p1->getY()) + salto <= (_special.at(i)->getY()+_special.at(i)->get_h_sz()))  {
+                        (_p1->getY()) <= (_special.at(i)->getY()+_special.at(i)->get_h_sz())+3)  {
 
                     _p1->addSpecialBullet(_special.at(i));
-                    _special.remove(i);
+                    //_special.remove(i);
                     _special.at(i)->setActive(false);
 
                 }
@@ -918,16 +933,32 @@ void Scenary::paintEvent(QPaintEvent *event)
 
 
     // imprime um tiro especial no cenário
-    if(_cont_t == 120){
+    if(_cont_t == 150){
 
-        Missile *_fs = new Missile(this,Qt::blue);
-        _fs->setX(rand() % 799 + 0);
-        _fs->setY(rand() % 600 + 0);
+        // qDebug()<<_special.size();
+        if(_special.size()<5){
+            Missile *_fs = new Missile(this,Qt::blue);
+            _fs->setX(rand() % 799 + 0);
+            _fs->setY(rand() % 600 + 0);
 
-        _fs->setActive(true);
-        _special.push_back(_fs);
+            _fs->setActive(true);
+            _special.push_back(_fs);
 
+        }
 
+    }
+    if(_cont_t == 300){
+
+        //qDebug()<<_special.size();
+        if(_special.size()<5){
+            Missile *_fs = new Missile(this,Qt::red);
+            _fs->setX(rand() % 600 + 0);
+            _fs->setY(rand() % 400 + 0);
+
+            _fs->setActive(true);
+            _special.push_back(_fs);
+
+        }
         _cont_t =0;
     }
 
@@ -950,10 +981,6 @@ void Scenary::paintEvent(QPaintEvent *event)
             }
         }
     }
-
-
-
-
 }
 
 void Scenary::keyPressEvent(QKeyEvent *event)
@@ -1041,7 +1068,7 @@ void Scenary::keyPressEvent(QKeyEvent *event)
     case Qt::Key_M:
         _p1->addSpecialFire();
         if(tecla_b == Qt::Key_Up){
-           // qDebug()<<_p1->getQtdSpecialFire();
+            // qDebug()<<_p1->getQtdSpecialFire();
             //qDebug()<<_p1->getSpecialBullet(0);
             _p1->getSpecialBullet(_p1->getQtdSpecialFire())->setX(_p1->getX()+(_p1->getW_size()/2)-(_p1->getSpecialBullet(_p1->getQtdSpecialFire())->get_h_sz()/2));
             _p1->getSpecialBullet(_p1->getQtdSpecialFire())->setY(_p1->getY()- _p1->getSpecialBullet(_p1->getQtdSpecialFire())->get_h_sz());
@@ -1049,17 +1076,19 @@ void Scenary::keyPressEvent(QKeyEvent *event)
         }
         if(tecla_b == Qt::Key_Down){
             _p1->getSpecialBullet(_p1->getQtdSpecialFire())->setX(_p1->getX()+(_p1->getW_size()/2)-(_p1->getSpecialBullet(_p1->getQtdSpecialFire())->get_h_sz()/2));
-            _p1->getSpecialBullet(_p1->getQtdSpecialFire())->setY(_p1->getY()+_p1->getH_size());
+            _p1->getSpecialBullet(_p1->getQtdSpecialFire())->setY(_p1->getY()+_p1->getH_size()+3);
             _p1->getSpecialBullet(_p1->getQtdSpecialFire())->setDirection('d');
         }
         if(tecla_b == Qt::Key_Right){
-            _p1->getSpecialBullet(_p1->getQtdSpecialFire())->setX(_p1->getX()+_p1->getW_size());
+            //qDebug()<<"right";
+            //qDebug()<< _p1->getQtdSpecialFire();
             _p1->getSpecialBullet(_p1->getQtdSpecialFire())->setY(_p1->getY()+(_p1->getH_size())/2-(_p1->getSpecialBullet(_p1->getQtdSpecialFire())->get_h_sz()/2));
+            _p1->getSpecialBullet(_p1->getQtdSpecialFire())->setX(_p1->getX()+_p1->getW_size()+3);
             _p1->getSpecialBullet(_p1->getQtdSpecialFire())->setDirection('r');
         }
         if(tecla_b == Qt::Key_Left){
-            _p1->getSpecialBullet(_p1->getQtdSpecialFire())->setX(_p1->getX()-_p1->getSpecialBullet(_p1->getQtdSpecialFire())->get_w_sz());
             _p1->getSpecialBullet(_p1->getQtdSpecialFire())->setY(_p1->getY()+(_p1->getH_size())/2-(_p1->getSpecialBullet(_p1->getQtdSpecialFire())->get_h_sz()/2));
+            _p1->getSpecialBullet(_p1->getQtdSpecialFire())->setX(_p1->getX()-_p1->getSpecialBullet(_p1->getQtdSpecialFire())->get_w_sz());
             _p1->getSpecialBullet(_p1->getQtdSpecialFire())->setDirection('l');
         }
 
@@ -1072,6 +1101,7 @@ void Scenary::keyPressEvent(QKeyEvent *event)
             }
         }
         break;
+
     case Qt::Key_U:
         if(_p2->getQtdFire()<4){
             // atualiza as Coordenadas do tiro

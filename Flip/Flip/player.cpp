@@ -75,17 +75,29 @@ void Player::draw(QPainter &p){
 
             for(int i=1;i<6;i++){
 
-                _raio = _h_sz/3.5;
-                _rad = _gr * (M_PI/180);
-                _bx = cos(_rad)*_raio+_x+_w_sz/2.5;
-                _by = sin(_rad)*_raio +_y+_h_sz/2.5;
+                if(!(_municao.at(i-1)->getActive())){
+                    p.setBrush(Qt::black);
+                    p.setPen(Qt::black);
+                }
+                if(_municao.at(i-1)->getActive()){
 
-                p.setBrush(Qt::black);
-                p.setPen(Qt::black);
-                p.drawEllipse(_bx,_by,_w_sz*0.3,_h_sz*0.2);
+                    p.setBrush(Qt::white);
+                    p.setPen(Qt::white);
+                }
 
-                _gr+=72;
-                _gr %=370;
+
+                    _raio = _h_sz/3.5;
+                    _rad = _gr * (M_PI/180);
+                    _bx = cos(_rad)*_raio+_x+_w_sz/2.5;
+                    _by = sin(_rad)*_raio +_y+_h_sz/2.5;
+
+
+                    p.drawEllipse(_bx,_by,_w_sz*0.3,_h_sz*0.2);
+
+                    _gr+=72;
+                    _gr %=370;
+
+
 
             }
             //qDebug()<<_qtd_print;
@@ -108,6 +120,7 @@ void Player::draw(QPainter &p){
             if(_Qtd_specialFire >=0){
                 for(int i=0;i<_municao_special.size();i++){
                     if(_municao_special.at(i)->getActive()){
+                        //qDebug()<<"ativo desenhar";
                         _municao_special.at(i)->draw(p);
                     }
                 }
@@ -217,6 +230,11 @@ void Player::addFire()
     _Qtd_fire++;
 }
 
+void Player::removeFire()
+{
+    _Qtd_fire--;
+}
+
 void Player::resetfire()
 {
     _Qtd_fire = 0;
@@ -237,16 +255,11 @@ Missile* Player::getBala(int index)
 
 }
 
-void Player::removeBala()
+void Player::removeBullet(int index)
 {
-    if(!(_municao.isEmpty())){
-        qDebug()<< _municao.size();
-        _municao.pop_front();
-        qDebug()<< _municao.size();
-    }else{
-        qDebug()<<"sem munição";
-    }
+    _municao.removeAt(index);
 }
+
 
 void Player::setActive(bool act)
 {
@@ -262,7 +275,7 @@ void Player::addSpecialBullet(Missile *bullet)
 {
     this->_municao_special.push_back(bullet);
     //this->_Qtd_specialFire++;
-    qDebug()<<"Size special:"<<_municao_special.size();
+    //qDebug()<<"Size special:"<<_municao_special.size();
 }
 
 Missile *Player::getSpecialBullet(int index)
@@ -285,6 +298,11 @@ void Player::removeSpecialFire()
 int Player::getQtdSpecialFire()
 {
     return this->_Qtd_specialFire;
+}
+
+QVector<Missile *> Player::getMunicao()
+{
+    return this->_municao;
 }
 
 

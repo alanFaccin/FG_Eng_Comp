@@ -24,9 +24,10 @@ public:
     void setQtdFire(int qtd);
     int getQtdFire();
     void addFire();
+    void removeFire();
     void resetfire();
     Missile* getBala(int index);
-    void removeBala();
+    void removeBullet(int index);
     void setActive(bool act);
     bool getActive();
     void addSpecialBullet(Missile* bullet);
@@ -34,6 +35,8 @@ public:
     void addSpecialFire();
     void removeSpecialFire();
     int getQtdSpecialFire();
+    QVector <Missile*> getMunicao();
+    QVector <Missile*> getMS();
 
 
 
