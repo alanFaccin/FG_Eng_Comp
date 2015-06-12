@@ -76,7 +76,7 @@ void Player::draw(QPainter &p){
             for(int i=1;i<6;i++){
 
                 _raio = _h_sz/3.5;
-                _rad = _gr * i * (M_PI/180);
+                _rad = _gr * (M_PI/180);
                 _bx = cos(_rad)*_raio+_x+_w_sz/2.5;
                 _by = sin(_rad)*_raio +_y+_h_sz/2.5;
 
@@ -84,12 +84,15 @@ void Player::draw(QPainter &p){
                 p.setPen(Qt::black);
                 p.drawEllipse(_bx,_by,_w_sz*0.3,_h_sz*0.2);
 
+                _gr+=72;
+                _gr %=370;
+
             }
             //qDebug()<<_qtd_print;
-            if(_qtd_print == 21){
-                _gr+=34;
-                _qtd_print = 1;
-            }
+//            if(_qtd_print == 21){
+//                _gr+=34;
+//                _qtd_print = 1;
+//            }
 
 
 
@@ -118,7 +121,7 @@ void Player::draw(QPainter &p){
             for(int i=1;i<6;i++){
 
                 _raio = _h_sz/3.5;
-                _rad = _gr * i * (M_PI/180);
+                _rad = _gr_2 * (M_PI/180);
                 _bx = cos(_rad)*_raio+_x+_w_sz/2.5;
                 _by = sin(_rad)*_raio +_y+_h_sz/2.5;
 
@@ -126,12 +129,16 @@ void Player::draw(QPainter &p){
                 p.setPen(Qt::white);
                 p.drawEllipse(_bx,_by,_w_sz*0.3,_h_sz*0.2);
 
+                _gr_2+=72;
+                _gr_2 %=370;
+
             }
-            //qDebug()<<_qtd_print;
-            if(_qtd_print == 21){
-                _gr+=34;
-                _qtd_print = 1;
-            }
+
+//            //qDebug()<<_qtd_print;
+//            if(_qtd_print == 21){
+//                _gr+=34;
+//                _qtd_print = 1;
+//            }
 
 
 

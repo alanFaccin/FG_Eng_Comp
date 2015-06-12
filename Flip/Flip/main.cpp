@@ -1,5 +1,5 @@
 #include "scenery.h"
-#include "time_anim_improved.h"
+
 
 #include <QApplication>
 #include <QHBoxLayout>

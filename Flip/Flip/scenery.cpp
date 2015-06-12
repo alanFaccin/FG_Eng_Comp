@@ -69,14 +69,13 @@ Scenary::Scenary(QWidget *parent)
     //play background music
 
     QMediaPlayer *_bg_music = new QMediaPlayer();
-    _bg_music->setMedia(QUrl("C:/Users/AlanJhones/Documents/GitHub/Flip_Game/Flip/Flip/sounds/bg_music.mp3"));
-    //_bg_music->setMedia(QUrl("qrc:/teste/bg_music.mp3"));
+    _bg_music->setMedia(QUrl("qrc:/sounds/sounds/bg_music.mp3"));
     //qDebug()<<_bg_music->mediaStatus();
     _bg_music->play();
-    //qDebug()<<_bg_music->mediaStatus();
+   // qDebug()<<_bg_music->mediaStatus();
     // sound colision
     _colision_music = new QMediaPlayer();
-    _colision_music->setMedia(QUrl("C:/Users/AlanJhones/Documents/GitHub/Flip_Game/Flip/Flip/sounds/c_tab.wav"));
+    _colision_music->setMedia(QUrl("qrc:/sounds/sounds/c_tab.wav"));
 
 
     // Start timer

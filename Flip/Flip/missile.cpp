@@ -15,7 +15,7 @@ Missile::Missile(QFrame *parent,const QColor color,int x, int y)
     this->_qtd_tiro=0;
 
     _fire_sound = new QMediaPlayer();
-    _fire_sound->setMedia(QUrl("C:/Users/AlanJhones/Documents/GitHub/Flip_Game/Flip/Flip/sounds/fire2.wav"));
+    _fire_sound->setMedia(QUrl("qrc:/sounds/sounds/fire2.wav"));
 
 }
 
