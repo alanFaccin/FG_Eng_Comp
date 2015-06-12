@@ -19,8 +19,9 @@ public:
     int Colision_Missile_Scenary_white(Missile *_t);
     int Colision_Missile_Scenary_black(Missile *_t);
     int Colision_cenario();
+    void colision_Special_bullet();
     void movePalyer();
-    Missile * getSpecial();
+    Missile * getSpecial(int index);
 
     // time animation improved
     qint64 _last_time_60fps;

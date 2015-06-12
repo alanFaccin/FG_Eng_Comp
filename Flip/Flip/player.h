@@ -29,6 +29,11 @@ public:
     void removeBala();
     void setActive(bool act);
     bool getActive();
+    void addSpecialBullet(Missile* bullet);
+    Missile* getSpecialBullet(int index);
+    void addSpecialFire();
+    void removeSpecialFire();
+    int getQtdSpecialFire();
 
 
 
@@ -44,7 +49,9 @@ private:
     int _w_sz;
     int _Qtd_fire;
     bool _active;
+    int _Qtd_specialFire;
 
     //Missile *_bala;
     QVector <Missile*> _municao;
+    QVector <Missile*> _municao_special;
 };
