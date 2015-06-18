@@ -21,6 +21,12 @@ Qt::Key tecla_p;
 bool tst_fire = false;
 float pos_x_atua_p1,pos_y_atua_p1,pos_x_atua_p2,pos_y_atua_p2;
 
+QPoint _btn_1,_btn_2,_btn_3,_btn_4,_btn_5;
+int _w_bt,_h_bt;
+bool selected_level = false;
+
+
+
 
 bool keyLeft = false,keyRight = false,keyUp = false,keyDown = false, KeySpace = false;
 bool keyA = false,keyD = false,keyW = false,keyS = false;
@@ -60,7 +66,7 @@ Scenary::Scenary(QWidget *parent)
         RectPos[r].resize(_Col);
     }
 
-    define_Scenary(5);
+    define_Scenary(1);
 
     _p1 = new Player(this, Qt::white,700,300);
     _p2 = new Player(this, Qt::black,100,300);
@@ -77,7 +83,7 @@ Scenary::Scenary(QWidget *parent)
     _colision_music = new QMediaPlayer();
     _colision_music->setMedia(QUrl("qrc:/sounds/sounds/fire2.wav"));
 
-    qDebug()<<_colision_music->mediaStatus();
+    //qDebug()<<_colision_music->mediaStatus();
 
 
     // Start timer
@@ -1703,69 +1709,69 @@ void Scenary::movePalyer()
     //player 1
     if (keyLeft && keyUp) {
 
-        _p1->setX(_p1->getX()-5);
-        _p1->setY(_p1->getY()-5);
+        _p1->setX(_p1->getX()-2);
+        _p1->setY(_p1->getY()-2);
         if(this->Colision_Player(_p1)==1){
-            _p1->setX(_p1->getX()+5);
-            _p1->setY(_p1->getY()+5);
+            _p1->setX(_p1->getX()+2);
+            _p1->setY(_p1->getY()+2);
         }
     }
 
     else if (keyRight && keyUp) {
 
-        _p1->setX(_p1->getX()+5);
-        _p1->setY(_p1->getY()-5);
+        _p1->setX(_p1->getX()+2);
+        _p1->setY(_p1->getY()-2);
         if(this->Colision_Player(_p1)==1){
-            _p1->setX(_p1->getX()-5);
-            _p1->setY(_p1->getY()+5);
+            _p1->setX(_p1->getX()-2);
+            _p1->setY(_p1->getY()+2);
         }
     }
 
     else if (keyDown && keyLeft) {
 
-        _p1->setX(_p1->getX()-5);
-        _p1->setY(_p1->getY()+5);
+        _p1->setX(_p1->getX()-2);
+        _p1->setY(_p1->getY()+2);
         if(this->Colision_Player(_p1)==1){
-            _p1->setX(_p1->getX()+5);
-            _p1->setY(_p1->getY()-5);
+            _p1->setX(_p1->getX()+2);
+            _p1->setY(_p1->getY()-2);
         }
     }
 
     else if (keyDown && keyRight) {
 
-        _p1->setX(_p1->getX()+5);
-        _p1->setY(_p1->getY()+5);
+        _p1->setX(_p1->getX()+2);
+        _p1->setY(_p1->getY()+2);
         if(this->Colision_Player(_p1)==1){
-            _p1->setX(_p1->getX()-5);
-            _p1->setY(_p1->getY()-5);
+            _p1->setX(_p1->getX()-2);
+            _p1->setY(_p1->getY()-2);
         }
     }
 
     if (keyLeft){
 
-        _p1->setX(_p1->getX()-5);
+        _p1->setX(_p1->getX()-6);
         if(this->Colision_Player(_p1)==1){
-            _p1->setX(_p1->getX()+5);
+            _p1->setX(_p1->getX()+6);
         }
     }
 
     else if (keyRight){
-        _p1->setX(_p1->getX()+5);
+        _p1->setX(_p1->getX()+6);
         if(this->Colision_Player(_p1)==1){
-            _p1->setX(_p1->getX()-5);
+            _p1->setX(_p1->getX()-6);
         }
     }
     if (keyDown){
-        _p1->setY(_p1->getY()+5);
+        _p1->setY(_p1->getY()+6);
         if(this->Colision_Player(_p1)==1){
-            _p1->setY(_p1->getY()-5);
+            _p1->setY(_p1->getY()-6);
         }
     }
 
     else if (keyUp){
-        _p1->setY(_p1->getY()-5);
+        _p1->setY(_p1->getY()-6);
         if(this->Colision_Player(_p1)==1){
-            _p1->setY(_p1->getY()+5);
+            _p1->setY(_p1->getY()+6);
         }
     }
 
@@ -1889,34 +1895,130 @@ void Scenary::paintEvent(QPaintEvent *event)
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setPen(Qt::gray);
 
-    //draw tabuleiro
-    for(int i=0;i<_Rows;i++){
-        for(int j=0;j<_Col;j++){
+    // impressão do menu
+    if(selected_level==false){
 
-            RectPos [i][j]= QPoint(_x,_y); // guarda a posição de cada quadradinho tabuleiro
-            if(RectColors[i][j]==0){
-                painter.setBrush( Qt::white );
+
+
+        for(int i=0;i<_Rows;i++){
+            for(int j=0;j<_Col;j++){
+
+                RectPos [i][j]= QPoint(_x,_y); // guarda a posição de cada quadradinho tabuleiro
+                if(RectColors[i][j]==0){
+                    painter.setBrush( Qt::white );
+                }
+                if(RectColors[i][j]==1){
+                    painter.setBrush( Qt::black );
+                }
+                if(RectColors[i][j]==-1){
+                    painter.setBrush( Qt::gray );
+                }
+                painter.drawRect(_x ,_y, _w_sz, _h_sz);
+                //qDebug()<< RectPos [i][j];
+                _x += _w_sz;
             }
-            if(RectColors[i][j]==1){
-                painter.setBrush( Qt::black );
-            }
-            if(RectColors[i][j]==-1){
-                painter.setBrush( Qt::gray );
-            }
-            painter.drawRect(_x ,_y, _w_sz, _h_sz);
-            //qDebug()<< RectPos [i][j];
-            _x += _w_sz;
+            _y +=_h_sz;
+            _x=0;
         }
-        _y +=_h_sz;
-        _x=0;
+
+        // inicio teste menu
+        _btn_1.setX(width()/4);
+        _btn_1.setY(height()/5);
+        _btn_2.setX(width()/4);
+        _btn_2.setY(_btn_1.y()+_h_bt+1);
+        _btn_3.setX(width()/4);
+        _btn_3.setY(_btn_2.y()+_h_bt+1);
+        _btn_4.setX(width()/4);
+        _btn_4.setY(_btn_3.y()+_h_bt+1);
+        _btn_5.setX(width()/4);
+        _btn_5.setY(_btn_4.y()+_h_bt+1);
+
+        _w_bt = width()/2;
+        _h_bt = height()/10;
+
+        QFont font = QFont ("Arial");
+        font.setPointSize (40);
+        font.setFixedPitch (true);
+
+
+        font.setPointSize (height()*0.05);
+        //botoes
+        painter.setBrush( Qt::white );
+        painter.setOpacity(0.8f);
+        painter.drawRect(0 ,0,width(),height());
+        painter.setBrush( Qt::black );
+        painter.setOpacity(100.0f);
+
+        painter.setBrush( Qt::white );
+        painter.drawRect(0,0,width(),height()/6);
+        painter.setPen(Qt::black);
+        painter.setFont(font);
+        painter.drawText(width()/4,(height()*0.1),"FLIP GAME - Alan Jhones");
+
+        painter.setBrush( Qt::black );
+        //btn_1
+        painter.drawRect(_btn_1.x() ,_btn_1.y(),_w_bt,_h_bt);
+        painter.setPen(Qt::white);
+        painter.setFont(font);
+        painter.drawText(_btn_1.x()+_w_bt/2.7,_btn_1.y()+_h_bt/1.3,"Level I");
+        //btn_2
+        painter.drawRect(_btn_2.x() ,_btn_2.y(),_w_bt,_h_bt);
+        painter.setPen(Qt::white);
+        painter.setFont(font);
+        painter.drawText(_btn_2.x()+_w_bt/2.7,_btn_2.y()+_h_bt/1.3,"Level II");
+        //btn_3
+        painter.drawRect(_btn_3.x() ,_btn_3.y(),_w_bt,_h_bt);
+        painter.setPen(Qt::white);
+        painter.setFont(font);
+        painter.drawText(_btn_3.x()+_w_bt/2.7,_btn_3.y()+_h_bt/1.3,"Level III");
+        //btn_4
+        painter.drawRect(_btn_4.x() ,_btn_4.y(),_w_bt,_h_bt);
+        painter.setPen(Qt::white);
+        painter.setFont(font);
+        painter.drawText(_btn_4.x()+_w_bt/2.7,_btn_4.y()+_h_bt/1.3,"Level IV");
+        //btn_5
+        painter.drawRect(_btn_5.x() ,_btn_5.y(),_w_bt,_h_bt);
+        painter.setPen(Qt::white);
+        painter.setFont(font);
+        painter.drawText(_btn_5.x()+_w_bt/2.7,_btn_5.y()+_h_bt/1.3,"Level V");
+
+
+
+        //fim teste menu
+    }
+    if(selected_level==true){
+
+        //draw tabuleiro
+        for(int i=0;i<_Rows;i++){
+            for(int j=0;j<_Col;j++){
+
+                RectPos [i][j]= QPoint(_x,_y); // guarda a posição de cada quadradinho tabuleiro
+                if(RectColors[i][j]==0){
+                    painter.setBrush( Qt::white );
+                }
+                if(RectColors[i][j]==1){
+                    painter.setBrush( Qt::black );
+                }
+                if(RectColors[i][j]==-1){
+                    painter.setBrush( Qt::gray );
+                }
+                painter.drawRect(_x ,_y, _w_sz, _h_sz);
+                //qDebug()<< RectPos [i][j];
+                _x += _w_sz;
+            }
+            _y +=_h_sz;
+            _x=0;
+        }
+
+
+        //draw player
+        _p1->draw(painter);
+        _p2->draw(painter);
+        //draw special fire
+        generateSpecialFire(painter);
     }
 
 
-    //draw player
-    _p1->draw(painter);
-    _p2->draw(painter);
-    //draw special fire
-    generateSpecialFire(painter);
 }
 
 void Scenary::keyPressEvent(QKeyEvent *event)
@@ -2226,6 +2328,68 @@ void Scenary::generateSpecialFire(QPainter &p)
         for(int i =0;i<_special.size();i++){
             _special.at(i)->setActive(false);
         }
+    }
+
+}
+
+void Scenary::mousePressEvent(QMouseEvent *event)
+{
+    if(event->button() == Qt::LeftButton){
+
+        QPoint pos = event->pos();
+        //botao 1
+        if((pos.x()) > (_btn_1.x()) &&
+                (pos.x()) < (_btn_1.x()+_w_bt) &&
+                (pos.y()) > (_btn_1.y()) &&
+                (pos.y()) < (_btn_1.y()+_h_bt))  {
+
+            define_Scenary(1);
+            selected_level = true;
+            // qDebug()<<"Botão 1 pressionado";
+
+        }
+        //botao 2
+        if((pos.x()) > (_btn_2.x()) &&
+                (pos.x()) < (_btn_2.x()+_w_bt) &&
+                (pos.y()) > (_btn_2.y()) &&
+                (pos.y()) < (_btn_2.y()+_h_bt))  {
+
+            define_Scenary(2);
+            selected_level = true;
+
+        }
+        //botao 3
+        if((pos.x()) > (_btn_3.x()) &&
+                (pos.x()) < (_btn_3.x()+_w_bt) &&
+                (pos.y()) > (_btn_3.y()) &&
+                (pos.y()) < (_btn_3.y()+_h_bt))  {
+
+            define_Scenary(3);
+            selected_level = true;
+
+        }
+        //botao 4
+        if((pos.x()) > (_btn_4.x()) &&
+                (pos.x()) < (_btn_4.x()+_w_bt) &&
+                (pos.y()) > (_btn_4.y()) &&
+                (pos.y()) < (_btn_4.y()+_h_bt))  {
+
+            define_Scenary(4);
+            selected_level = true;
+
+        }
+        //botao 5
+        if((pos.x()) > (_btn_5.x()) &&
+                (pos.x()) < (_btn_5.x()+_w_bt) &&
+                (pos.y()) > (_btn_5.y()) &&
+                (pos.y()) < (_btn_5.y()+_h_bt))  {
+
+            define_Scenary(5);
+            selected_level = true;
+
+        }
+
+
     }
 
 }

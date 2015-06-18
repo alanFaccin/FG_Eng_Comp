@@ -33,7 +33,7 @@ public:
     int _counter;
     float _constant_dt;
 
-
+    void mousePressEvent(QMouseEvent* event);
     void paintEvent(QPaintEvent* event);
     void keyPressEvent(QKeyEvent* event);
     void keyReleaseEvent(QKeyEvent *);
