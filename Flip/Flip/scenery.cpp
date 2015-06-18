@@ -69,13 +69,15 @@ Scenary::Scenary(QWidget *parent)
     //play background music
 
     QMediaPlayer *_bg_music = new QMediaPlayer();
-    _bg_music->setMedia(QUrl("qrc:/sounds/sounds/bg_music.mp3"));
+  //  _bg_music->setMedia(QUrl("qrc:/sounds/sounds/bg_music.mp3"));
     //qDebug()<<_bg_music->mediaStatus();
-    _bg_music->play();
+    //->play();
     // qDebug()<<_bg_music->mediaStatus();
     // sound colision
     _colision_music = new QMediaPlayer();
-    _colision_music->setMedia(QUrl("qrc:/sounds/sounds/c_tab.wav"));
+    _colision_music->setMedia(QUrl("qrc:/sounds/sounds/fire2.wav"));
+
+    qDebug()<<_colision_music->mediaStatus();
 
 
     // Start timer
@@ -1041,8 +1043,6 @@ void Scenary::keyPressEvent(QKeyEvent *event)
 
         }
         break;
-
-
 
     }
 }

@@ -4,5 +4,6 @@
         <file>sounds/c_tab.wav</file>
         <file>sounds/fire.mp3</file>
         <file>sounds/fire2.wav</file>
+        <file>sounds/teste.wav</file>
     </qresource>
 </RCC>
