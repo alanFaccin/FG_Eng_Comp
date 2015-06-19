@@ -12,7 +12,7 @@ double _rad = 0;
 double _raio = 0;
 int _gr = 72,_gr_2 = 72;
 
-
+int _qtd_spe = 0;
 int _cont = 0;
 
 Player::Player(QFrame *parent, const QColor color, int x, int y){
@@ -46,28 +46,47 @@ void Player::draw(QPainter &p){
             for(int i=1;i<6;i++){
 
                 if(!(_municao.at(i-1)->getActive())){
-                    p.setBrush(Qt::black);
-                    p.setPen(Qt::black);
+
+                        p.setBrush(Qt::black);
+                        p.setPen(Qt::black);
+
+
                 }
+
                 if(_municao.at(i-1)->getActive()){
 
-                    p.setBrush(Qt::white);
-                    p.setPen(Qt::white);
+
+                        for(int i=0;i<_municao_special.size();i++){
+                            if(!(_municao_special.at(i)->getActive())){
+                                p.setBrush(_municao_special.at(i)->getColor());
+                                p.setPen(_municao_special.at(i)->getColor());
+                            }else{
+                                p.setBrush(Qt::white);
+                                p.setPen(Qt::white);
+
+
+                            }
+                        }
+
+
+
                 }
 
 
-                    _raio = _h_sz/3.5;
-                    _rad = _gr * (M_PI/180);
-                    _bx = cos(_rad)*_raio+_x+_w_sz/2.5;
-                    _by = sin(_rad)*_raio +_y+_h_sz/2.5;
+
+                _raio = _h_sz/3.5;
+                _rad = _gr * (M_PI/180);
+                _bx = cos(_rad)*_raio+_x+_w_sz/2.5;
+                _by = sin(_rad)*_raio +_y+_h_sz/2.5;
 
 
-                    p.drawEllipse(_bx,_by,_w_sz*0.3,_h_sz*0.2);
+                p.drawEllipse(_bx,_by,_w_sz*0.3,_h_sz*0.2);
 
-                    _gr+=72;
-                    _gr %=370;
+                _gr+=72;
+                _gr %=370;
 
             }
+
 
             if(_Qtd_fire >=0){
                 for(int i=0;i<5;i++){
@@ -192,7 +211,7 @@ Missile* Player::getBullet(int index)
         if(index<5 && index >=0 ){
             return _municao.at(index);
         }
-      }
+    }
 
 
 }
@@ -215,6 +234,8 @@ bool Player::getActive()
 
 void Player::addSpecialBullet(Missile *bullet)
 {
+
+
     this->_municao_special.push_back(bullet);
 
 }

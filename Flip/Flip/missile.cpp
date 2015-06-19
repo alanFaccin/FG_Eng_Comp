@@ -21,8 +21,8 @@ Missile::Missile(QFrame *parent,const QColor color,int x, int y)
 
 void Missile::draw(QPainter &p)
 {
-
-        if(_active && _qtd_tiro <= 5){
+// tirado do if abaixo:  && _qtd_tiro <= 5
+        if(_active ){
 
           if(this->getColor() == Qt::blue){
 
