@@ -1462,9 +1462,6 @@ int Scenary::Colision_Player(Player *_p)
                             (_p->getY() + _p->getH_size()) >= (RectPos[i][j].y()) &&
                             (_p->getY()) + salto <= (RectPos[i][j].y()+_h_sz))  {
 
-
-                        // qDebug()<<"Colidiu";
-
                         return 1;
 
                     }
