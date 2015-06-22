@@ -18,6 +18,7 @@ public:
     int Colision_Player(Player *_p);
     int Colision_Missile_Scenary_white(Missile *_t);
     int Colision_Missile_Missile();
+    int Colision_Missile_Missile_sp();
     int Colision_Missile_Scenary_black(Missile *_t);
     int Colision_SB_Scenary_white(Missile *_t);
     int Colision_SB_Scenary_black(Missile *_t);
@@ -25,7 +26,6 @@ public:
     void colision_Special_bullet();
     void movePalyer();
     void atualizaPosition();
-    Missile * getSpecial(int index);
     void Colision_Missile_Scenary();
     void generateSpecialFire(QPainter& p);
 

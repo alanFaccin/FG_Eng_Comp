@@ -12,8 +12,6 @@ double _rad = 0;
 double _raio = 0;
 int _gr = 72,_gr_2 = 72;
 
-int _qtd_spe = 0;
-int _cont = 0;
 
 Player::Player(QFrame *parent, const QColor color, int x, int y){
 
@@ -24,9 +22,10 @@ Player::Player(QFrame *parent, const QColor color, int x, int y){
     _h_sz = (height()/12)*0.6;
     _w_sz =(width()/20)*0.6;
 
+    //controlar qtd de tiros
     _Qtd_fire = -1;
     _Qtd_specialFire = 0;
-
+    // alocação de memoria para os 5 tiros do player
     for(int i=0;i<5;i++){
         Missile *_bullet= new Missile(this,this->_color);
         _municao.push_back(_bullet);
@@ -41,6 +40,7 @@ void Player::draw(QPainter &p){
         p.setBrush(_color);
         p.drawRoundedRect(_x,_y,_w_sz,_h_sz,2.5,2.5);
 
+        //desenho e movimentação munição interior player 1
         if(this->getColor() == Qt::white){
 
             for(int i=0;i < 5;i++){
@@ -79,9 +79,7 @@ void Player::draw(QPainter &p){
             }
 
         }
-
-        //player 2
-
+        //desenho e movimentação munição interior player 2
         if(this->getColor() == Qt::black){
 
             for(int i=0;i<5;i++){
@@ -196,8 +194,6 @@ Missile* Player::getBullet(int index)
             return _municao.at(index);
         }
     }
-
-
 }
 
 void Player::removeBullet(int index)
@@ -218,20 +214,12 @@ bool Player::getActive()
 
 void Player::addSpecialBullet(Missile *bullet)
 {
-
     this->_municao.push_back(bullet);
-    // this->_municao_special.push_back(bullet);
-    for(int i=0;i<_municao.size();i++){
-        // qDebug()<<"index: "<< i << _municao.at(i)->getColor() << _municao.at(i)->getActive();
-    }
-
 }
 
 Missile *Player::getSpecialBullet(int index)
 {
-
     return _municao_special.at(index);
-
 }
 
 void Player::addSpecialFire()

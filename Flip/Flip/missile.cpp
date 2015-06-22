@@ -64,7 +64,6 @@ void Missile::draw(QPainter &p)
                 }
 
             }else{
-                qDebug()<<"aqui";
                 p.drawRect(_x,_y,_w_sz,_h_sz);
             }
             move();
@@ -150,36 +149,33 @@ bool Missile::getActive()
 void Missile::move()
 {
     if(_direction == 'u'){
-        _y -=10;
+        _y -=7;
     }
     if(_direction == 'd'){
-        _y +=10;
+        _y +=7;
     }
     if(_direction == 'r'){
-        _x +=10;
+        _x +=7;
     }
     if(_direction == 'l'){
-        _x -=10;
+        _x -=7;
     }
-    //qDebug()<<"move";
-    //QTimer::singleShot(10, this, SLOT(move()));
 }
 
 void Missile::moveRed()
 {
 
     if(_direction == 'u'){
-        _y -=20;
+        _y -=12;
     }
     if(_direction == 'd'){
-        // qDebug()<<"_direction == 'd'";
-        _y +=20;
+        _y +=12;
     }
     if(_direction == 'r'){
-        _x +=20;
+        _x +=12;
     }
     if(_direction == 'l'){
-        _x -=20;
+        _x -=12;
     }
 }
 void Missile::setQtdTiro(int t)

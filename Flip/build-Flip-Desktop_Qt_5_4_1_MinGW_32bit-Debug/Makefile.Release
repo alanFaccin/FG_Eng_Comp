@@ -124,6 +124,7 @@ release/qrc_rep.cpp: ../Flip/rep.qrc \
 		../Flip/sounds/fire.mp3 \
 		../Flip/sounds/fire2.wav \
 		../Flip/sounds/c_tab.wav \
+		../Flip/sounds/teste.wav \
 		../Flip/sounds/bg_music.mp3
 	C:\Qt\Qt5.4.1\5.4\mingw491_32\bin\rcc.exe -name rep ..\Flip\rep.qrc -o release\qrc_rep.cpp
 
