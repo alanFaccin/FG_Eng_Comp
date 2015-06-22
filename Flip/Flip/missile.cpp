@@ -3,6 +3,7 @@
 #include <QTimer>
 #include <QDebug>
 
+int cont=0;
 Missile::Missile(QFrame *parent,const QColor color,int x, int y)
 {
 
@@ -13,6 +14,8 @@ Missile::Missile(QFrame *parent,const QColor color,int x, int y)
     this->_color = color;
     this->_active = false;
     this->_qtd_tiro=0;
+    this->_sf_p=0;
+    this->_player = false;
 
     _fire_sound = new QMediaPlayer();
     _fire_sound->setMedia(QUrl("qrc:/sounds/sounds/fire2.wav"));
@@ -21,39 +24,58 @@ Missile::Missile(QFrame *parent,const QColor color,int x, int y)
 
 void Missile::draw(QPainter &p)
 {
-// tirado do if abaixo:  && _qtd_tiro <= 5
-        if(_active ){
+    // tirado do if abaixo:  && _qtd_tiro <= 5
+    if(_active ){
 
-          if(this->getColor() == Qt::blue){
+        if(this->getColor() == Qt::red){
+            p.setPen(_color);
+            p.setBrush(_color);
+            //p.drawRect(_x,_y,_w_sz,_h_sz);
+            if(!this->isInPlayer()){
+                ++cont;
+                if(cont <100 || cont>200){
+                    p.drawRect(_x,_y,_w_sz,_h_sz);
+                }
+                if(cont > 100 && cont < 200){
+                    p.drawRect(_x+2,_y+2,(_w_sz/2),(_h_sz/2));
+                }
+                if(cont == 250){
+                    cont=0;
+                }
 
-              p.setPen(_color);
-              p.setBrush(_color);
-              p.drawRect(_x,_y,_w_sz*2,_h_sz*2);
-              move();
+            }else{
+                p.drawRect(_x,_y,_w_sz,_h_sz);
+            }
+            moveRed();
 
-          }else if(this->getColor() == Qt::red){
-              //qDebug()<<"vermelha";
-              p.setPen(_color);
-              p.setBrush(_color);
-              p.drawRect(_x,_y,_w_sz,_h_sz);
-              moveRed();
-          }else{
-              p.setPen(_color);
-              p.setBrush(_color);
-              p.drawRect(_x,_y,_w_sz,_h_sz);
-              move();
-          }
+        }else if (this->getColor() == Qt::blue){
+            p.setPen(_color);
+            p.setBrush(_color);
+            if(!(this->isInPlayer())){
+                ++cont;
+                if(cont <100 || cont>200){
+                    p.drawRect(_x,_y,_w_sz,_h_sz);
+                }
+                if(cont > 100 && cont < 200){
+                    p.drawRect(_x+2,_y+2,(_w_sz/2),(_h_sz/2));
+                }
+                if(cont == 250){
+                    cont=0;
+                }
 
-//          p.setPen(_color);
-//          p.setBrush(_color);
-//          p.drawRect(_x,_y,_w_sz,_h_sz);
-
-//          move();
+            }else{
+                qDebug()<<"aqui";
+                p.drawRect(_x,_y,_w_sz,_h_sz);
+            }
+            move();
         }else{
-           // _active = false;
+            p.setPen(_color);
+            p.setBrush(_color);
+            p.drawRect(_x,_y,_w_sz,_h_sz);
+            move();
         }
 
-
+    }
 }
 
 void Missile::setX(int x)
@@ -150,7 +172,7 @@ void Missile::moveRed()
         _y -=20;
     }
     if(_direction == 'd'){
-       // qDebug()<<"_direction == 'd'";
+        // qDebug()<<"_direction == 'd'";
         _y +=20;
     }
     if(_direction == 'r'){
@@ -179,3 +201,22 @@ void Missile::resetTiro()
     _qtd_tiro = 0;
 }
 
+void Missile::setSf_p(int p)
+{
+    this->_sf_p =p;
+}
+
+int Missile::getSf_p()
+{
+    return this->_sf_p;
+}
+
+void Missile::setOwner()
+{
+    this->_player = true;
+}
+
+bool Missile::isInPlayer()
+{
+    return this->_player;
+}

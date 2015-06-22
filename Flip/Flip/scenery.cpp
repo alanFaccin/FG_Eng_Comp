@@ -1561,6 +1561,144 @@ int Scenary::Colision_Missile_Scenary_black(Missile *_t)
     }
 }
 
+int Scenary::Colision_SB_Scenary_white(Missile *_t)
+{
+    // qDebug()<<"Colision_SB_Scenary_white: "<<_t->getColor();
+    if(_t->getColor() == Qt::red ||_t->getColor() == Qt::blue ){
+        for(int i=0;i<_Rows;i++){
+            for(int j=0;j<_Col;j++){
+
+                if(RectColors[i][j] == branco){
+
+                    if((_t->getX()+_t->get_w_sz())>=(RectPos[i][j].x()) &&
+                            (_t->getX())<=(RectPos[i][j].x()+_w_sz) &&
+                            (_t->getY() + _t->get_h_sz()) >= (RectPos[i][j].y()) &&
+                            (_t->getY())<= (RectPos[i][j].y()+_h_sz))  {
+
+                        RectColors[i][j] = preto;
+                        if(_colision_music->state() == QMediaPlayer::PlayingState){
+                            _colision_music->setPosition(0);
+                        }else if (_colision_music->state() == QMediaPlayer::StoppedState){
+                            _colision_music->play();
+                        }
+
+                        //qDebug()<<"Colidiu";
+
+                        return 1;
+
+                    }
+
+                }
+
+                if(RectColors[i][j] == cinza){
+
+                    if((_t->getX()+_t->get_w_sz())>=(RectPos[i][j].x()) &&
+                            (_t->getX())<=(RectPos[i][j].x()+_w_sz) &&
+                            (_t->getY() + _t->get_h_sz()) >= (RectPos[i][j].y()) &&
+                            (_t->getY())<= (RectPos[i][j].y()+_h_sz))  {
+
+
+                        //_t->setActive(false);
+
+                        //teste
+                        _t->setX(-5000);
+                        _t->setY(-5000);
+
+                        return 1;
+
+                    }
+
+                }
+                //Colisao com o player adiversario
+                if(_t->getSf_p()== 1){
+                    if((_t->getX()+_t->get_w_sz())>=(_p2->getX()) &&
+                            (_t->getX())<=(_p2->getX()+_p2->getW_size()) &&
+                            (_t->getY() + _t->get_h_sz()) >= (_p2->getY()) &&
+                            (_t->getY())<= (_p2->getY()+_p2->getH_size()))  {
+
+                        for(int i=0;i<_Rows;i++){
+                            for(int j=0;j<_Col;j++){
+                                RectColors[i][j] = preto;
+                            }
+                        }
+                        _p2->setActive(false);
+                        return 1;
+                    }
+                }
+            }
+        }
+    }
+}
+
+int Scenary::Colision_SB_Scenary_black(Missile *_t)
+{
+    //qDebug()<<"aqui";
+    if(_t->getColor() == Qt::red ||_t->getColor() == Qt::blue ){
+        for(int i=0;i<_Rows;i++){
+            for(int j=0;j<_Col;j++){
+
+                if(RectColors[i][j] == preto){
+
+                    if((_t->getX()+_t->get_w_sz())>=(RectPos[i][j].x()) &&
+                            (_t->getX())<=(RectPos[i][j].x()+_w_sz) &&
+                            (_t->getY() + _t->get_h_sz()) >= (RectPos[i][j].y()) &&
+                            (_t->getY())<= (RectPos[i][j].y()+_h_sz))  {
+
+                        RectColors[i][j] = branco;
+
+                        if(_colision_music->state() == QMediaPlayer::PlayingState){
+                            _colision_music->setPosition(0);
+                        }else if (_colision_music->state() == QMediaPlayer::StoppedState){
+                            _colision_music->play();
+                        }
+
+                        return 1;
+
+                    }
+
+                }
+
+                if(RectColors[i][j] == cinza){
+
+                    if((_t->getX()+_t->get_w_sz())>=(RectPos[i][j].x()) &&
+                            (_t->getX())<=(RectPos[i][j].x()+_w_sz) &&
+                            (_t->getY() + _t->get_h_sz()) >= (RectPos[i][j].y()) &&
+                            (_t->getY())<= (RectPos[i][j].y()+_h_sz))  {
+
+                        //_t->setActive(false);
+
+                        _t->setX(-5000);
+                        _t->setY(-5000);
+
+                        return 1;
+
+                    }
+
+                }
+                //Colisao com o player adiversario
+                if(_t->getSf_p()== 2){
+                    if((_t->getX()+_t->get_w_sz())>=(_p1->getX()) &&
+                            (_t->getX())<=(_p1->getX()+_p1->getW_size()) &&
+                            (_t->getY() + _t->get_h_sz()) >= (_p1->getY()) &&
+                            (_t->getY())<= (_p1->getY()+_p1->getH_size()))  {
+
+                        for(int i=0;i<_Rows;i++){
+                            for(int j=0;j<_Col;j++){
+                                RectColors[i][j] = branco;
+                                _p1->setActive(false);
+                            }
+                        }
+
+
+                        return 1;
+
+                    }
+                }
+            }
+        }
+    }
+}
+
 int Scenary::Colision_Missile_Scenary_white(Missile *_t)
 {
 
@@ -1630,6 +1768,43 @@ int Scenary::Colision_Missile_Scenary_white(Missile *_t)
 
 }
 
+int Scenary::Colision_Missile_Missile()
+{
+    if(_p1->getQtdFire()>=0 && _p2->getQtdFire()>=0 ){
+        if(_p1->getActive() && _p2->getActive()){
+
+           // if(_p1->getMunicao().size()>_p2->getMunicao().size()){
+                for(int i=0;i<_p1->getMunicao().size();i++){
+                    if(_p1->getBullet(i)->getActive()){
+                        for(int j=0;j<_p2->getMunicao().size();j++){
+                               if(_p2->getBullet(j)->getActive()){
+                                   if((_p1->getBullet(i)->getX()+_p1->getBullet(i)->get_w_sz())>=(_p2->getBullet(j)->getX()) &&
+                                           (_p1->getBullet(i)->getX())<=(_p2->getBullet(j)->getX()+_p2->getBullet(j)->get_w_sz()) &&
+                                           (_p1->getBullet(i)->getY() + _p1->getBullet(i)->get_h_sz()) >= (_p2->getBullet(j)->getY()) &&
+                                           (_p1->getBullet(i)->getY())<= (_p2->getBullet(j)->getY() + _p2->getBullet(j)->get_h_sz()))  {
+
+                                       _p1->getBullet(i)->setX(-5000);
+                                       _p1->getBullet(i)->setY(-5000);
+
+                                       _p2->getBullet(j)->setX(-5000);
+                                       _p2->getBullet(j)->setY(-5000);
+
+                                       return 1;
+
+                                   }
+
+                               }
+                        }
+                    }
+
+                }
+            //}
+
+
+        }
+    }
+}
+
 int Scenary::Colision_cenario()
 {
     //player 1
@@ -1690,14 +1865,52 @@ void Scenary::colision_Special_bullet()
 
 
 
-
+                    _special.at(i)->setActive(false);
+                    if( _special.at(i)->getColor()== Qt::blue){
+                        _special.at(i)->set_h_sz(height()*0.04);
+                        _special.at(i)->set_w_sz(width()*0.04);
+                    }
+                    _special.at(i)->setOwner();
                     _p1->addSpecialBullet(_special.at(i));
+                    _p1->addSpecialFire();
 
 
 
 
                     //_special.remove(i);
+
+                    // qDebug()<<"colisao";
+
+                }
+            }
+        }
+
+    }
+    if(_p2->getColor() == Qt::black){
+
+        for(int i =0;i<_special.size();i++){
+            if(_special.at(i)->getActive()){
+
+                if((_p2->getX()+_p2->getW_size())>=(_special.at(i)->getX()) &&
+                        (_p2->getX())<=(_special.at(i)->getX()+_special.at(i)->get_w_sz()) &&
+                        (_p2->getY() + _p2->getH_size()) >= (_special.at(i)->getY()) &&
+                        (_p2->getY()) <= (_special.at(i)->getY()+_special.at(i)->get_h_sz()))  {
+
+
                     _special.at(i)->setActive(false);
+                    if( _special.at(i)->getColor()== Qt::blue){
+                        _special.at(i)->set_h_sz(height()*0.04);
+                        _special.at(i)->set_w_sz(width()*0.04);
+                    }
+                    _special.at(i)->setOwner();
+                    _p2->addSpecialBullet(_special.at(i));
+                    _p2->addSpecialFire();
+
+
+
+
+                    //_special.remove(i);
+
                     // qDebug()<<"colisao";
 
                 }
@@ -1877,6 +2090,7 @@ void Scenary::_tick()
         Colision_cenario();
         Colision_Missile_Scenary();
         colision_Special_bullet();
+        Colision_Missile_Missile();
         movePalyer();
         draw();
         // acumula qtd vezes que passou aqui
@@ -2066,6 +2280,7 @@ void Scenary::keyPressEvent(QKeyEvent *event)
 
             if(_p1->getQtdFire()<4){
                 _p1->addFire();
+               // qDebug()<<_p1->getQtdFire();
                 if(tecla_b == Qt::Key_Up){
                     _p1->getBullet(_p1->getQtdFire())->setX(_p1->getX()+(_p1->getW_size()/2)-(_p1->getBullet(_p1->getQtdFire())->get_h_sz()/2));
                     _p1->getBullet(_p1->getQtdFire())->setY(_p1->getY()- _p1->getBullet(_p1->getQtdFire())->get_h_sz());
@@ -2088,19 +2303,19 @@ void Scenary::keyPressEvent(QKeyEvent *event)
                 }
 
                 //start fire
-
-                if(_p1->getBullet(_p1->getQtdFire())->getQtdTiro()<=5 && tecla_b != NULL){
-                    _p1->getBullet(_p1->getQtdFire())->setActive(true);
-                    if(_p1->getBullet(_p1->getQtdFire())->getFireSound()->state() == QMediaPlayer::PlayingState ){
-                        _p1->getBullet(_p1->getQtdFire())->getFireSound()->setPosition(0);
-                    }else if (_p1->getBullet(_p1->getQtdFire())->getFireSound()->state() == QMediaPlayer::StoppedState){
-                        _p1->getBullet(_p1->getQtdFire())->getFireSound()->play();
-                    }
-
-                    //_p1->getBullet(_p1->getQtdFire())->addTiro();
-
-
+                // retirado do if _p1->getBullet(_p1->getQtdFire())->getQtdTiro()<=5 &&
+                // if(tecla_b != NULL){
+                _p1->getBullet(_p1->getQtdFire())->setActive(true);
+                if(_p1->getBullet(_p1->getQtdFire())->getFireSound()->state() == QMediaPlayer::PlayingState ){
+                    _p1->getBullet(_p1->getQtdFire())->getFireSound()->setPosition(0);
+                }else if (_p1->getBullet(_p1->getQtdFire())->getFireSound()->state() == QMediaPlayer::StoppedState){
+                    _p1->getBullet(_p1->getQtdFire())->getFireSound()->play();
                 }
+
+                //_p1->getBullet(_p1->getQtdFire())->addTiro();
+
+
+                //}
             }
 
         }
@@ -2108,38 +2323,136 @@ void Scenary::keyPressEvent(QKeyEvent *event)
         break;
 
     case Qt::Key_M:
-        _p1->addSpecialFire();
-        if(tecla_b == Qt::Key_Up){
-            _p1->getSpecialBullet(_p1->getQtdSpecialFire())->setX(_p1->getX()+(_p1->getW_size()/2)-(_p1->getSpecialBullet(_p1->getQtdSpecialFire())->get_h_sz()/2));
-            _p1->getSpecialBullet(_p1->getQtdSpecialFire())->setY(_p1->getY()- _p1->getSpecialBullet(_p1->getQtdSpecialFire())->get_h_sz()-5);
-            _p1->getSpecialBullet(_p1->getQtdSpecialFire())->setDirection('u');
-        }
-        if(tecla_b == Qt::Key_Down){
-            _p1->getSpecialBullet(_p1->getQtdSpecialFire())->setX(_p1->getX()+(_p1->getW_size()/2)-(_p1->getSpecialBullet(_p1->getQtdSpecialFire())->get_h_sz()/2));
-            _p1->getSpecialBullet(_p1->getQtdSpecialFire())->setY(_p1->getY()+_p1->getH_size()+5);
-            _p1->getSpecialBullet(_p1->getQtdSpecialFire())->setDirection('d');
-        }
-        if(tecla_b == Qt::Key_Right){
-            _p1->getSpecialBullet(_p1->getQtdSpecialFire())->setY(_p1->getY()+(_p1->getH_size())/2-(_p1->getSpecialBullet(_p1->getQtdSpecialFire())->get_h_sz()/2));
-            _p1->getSpecialBullet(_p1->getQtdSpecialFire())->setX(_p1->getX()+_p1->getW_size()+5);
-            _p1->getSpecialBullet(_p1->getQtdSpecialFire())->setDirection('r');
-        }
-        if(tecla_b == Qt::Key_Left){
-            _p1->getSpecialBullet(_p1->getQtdSpecialFire())->setY(_p1->getY()+(_p1->getH_size())/2-(_p1->getSpecialBullet(_p1->getQtdSpecialFire())->get_h_sz()/2));
-            _p1->getSpecialBullet(_p1->getQtdSpecialFire())->setX(_p1->getX()-_p1->getSpecialBullet(_p1->getQtdSpecialFire())->get_w_sz()-5);
-            _p1->getSpecialBullet(_p1->getQtdSpecialFire())->setDirection('l');
-        }
+        int index;
+        //qDebug()<< _p1->getQtdSpecialFire();
+        if(_p1->getQtdSpecialFire()>0){
+            for(int i=0;i<_p1->getMunicao().size();i++){
+                if(!(_p1->getBullet(i)->getActive())){
+                    //qDebug()<<"index: "<<i;
+                    //qDebug()<<_p1->getBullet(i)->getColor();
+                    if(_p1->getBullet(i)->getColor() == Qt::red || _p1->getBullet(i)->getColor() == Qt::blue){
+                        index = i;
 
-        if(_p1->getQtdSpecialFire()>=0 && tecla_b != NULL){
-            _p1->getSpecialBullet(_p1->getQtdSpecialFire())->setActive(true);
-            if(_p1->getSpecialBullet(_p1->getQtdSpecialFire())->getFireSound()->state() == QMediaPlayer::PlayingState ){
-                _p1->getSpecialBullet(_p1->getQtdSpecialFire())->getFireSound()->setPosition(0);
-            }else if (_p1->getSpecialBullet(_p1->getQtdSpecialFire())->getFireSound()->state() == QMediaPlayer::StoppedState){
-                _p1->getSpecialBullet(_p1->getQtdSpecialFire())->getFireSound()->play();
+                    }
+                }
             }
-        }
-        break;
 
+            if(tecla_b == Qt::Key_Up){
+                _p1->getBullet(index)->setX(_p1->getX()+(_p1->getW_size()/2)-( _p1->getBullet(index)->get_h_sz()/2));
+                _p1->getBullet(index)->setY(_p1->getY()- _p1->getBullet(index)->get_h_sz()-5);
+                _p1->getBullet(index)->setDirection('u');
+            }
+            if(tecla_b == Qt::Key_Down){
+                _p1->getBullet(index)->setX(_p1->getX()+(_p1->getW_size()/2)-( _p1->getBullet(index)->get_h_sz()/2));
+                _p1->getBullet(index)->setY(_p1->getY()+_p1->getH_size()+5);
+                _p1->getBullet(index)->setDirection('d');
+            }
+            if(tecla_b == Qt::Key_Right){
+                _p1->getBullet(index)->setY(_p1->getY()+(_p1->getH_size())/2-( _p1->getBullet(index)->get_h_sz()/2));
+                _p1->getBullet(index)->setX(_p1->getX()+_p1->getW_size()+5);
+                _p1->getBullet(index)->setDirection('r');
+            }
+            if(tecla_b == Qt::Key_Left){
+                _p1->getBullet(index)->setY(_p1->getY()+(_p1->getH_size())/2-( _p1->getBullet(index)->get_h_sz()/2));
+                _p1->getBullet(index)->setX(_p1->getX()- _p1->getBullet(index)->get_w_sz()-5);
+                _p1->getBullet(index)->setDirection('l');
+            }
+
+            _p1->getBullet(index)->setSf_p(1);
+
+            if(tecla_b != NULL){
+                _p1->getBullet(index)->setActive(true);
+                if( _p1->getBullet(index)->getFireSound()->state() == QMediaPlayer::PlayingState ){
+                    _p1->getBullet(index)->getFireSound()->setPosition(0);
+                }else if ( _p1->getBullet(index)->getFireSound()->state() == QMediaPlayer::StoppedState){
+                    _p1->getBullet(index)->getFireSound()->play();
+                }
+            }
+
+            _p1->removeSpecialFire();
+
+
+        }
+        //        _p1->addSpecialFire();
+        //        if(tecla_b == Qt::Key_Up){
+        //            _p1->getSpecialBullet(_p1->getQtdSpecialFire())->setX(_p1->getX()+(_p1->getW_size()/2)-(_p1->getSpecialBullet(_p1->getQtdSpecialFire())->get_h_sz()/2));
+        //            _p1->getSpecialBullet(_p1->getQtdSpecialFire())->setY(_p1->getY()- _p1->getSpecialBullet(_p1->getQtdSpecialFire())->get_h_sz()-5);
+        //            _p1->getSpecialBullet(_p1->getQtdSpecialFire())->setDirection('u');
+        //        }
+        //        if(tecla_b == Qt::Key_Down){
+        //            _p1->getSpecialBullet(_p1->getQtdSpecialFire())->setX(_p1->getX()+(_p1->getW_size()/2)-(_p1->getSpecialBullet(_p1->getQtdSpecialFire())->get_h_sz()/2));
+        //            _p1->getSpecialBullet(_p1->getQtdSpecialFire())->setY(_p1->getY()+_p1->getH_size()+5);
+        //            _p1->getSpecialBullet(_p1->getQtdSpecialFire())->setDirection('d');
+        //        }
+        //        if(tecla_b == Qt::Key_Right){
+        //            _p1->getSpecialBullet(_p1->getQtdSpecialFire())->setY(_p1->getY()+(_p1->getH_size())/2-(_p1->getSpecialBullet(_p1->getQtdSpecialFire())->get_h_sz()/2));
+        //            _p1->getSpecialBullet(_p1->getQtdSpecialFire())->setX(_p1->getX()+_p1->getW_size()+5);
+        //            _p1->getSpecialBullet(_p1->getQtdSpecialFire())->setDirection('r');
+        //        }
+        //        if(tecla_b == Qt::Key_Left){
+        //            _p1->getSpecialBullet(_p1->getQtdSpecialFire())->setY(_p1->getY()+(_p1->getH_size())/2-(_p1->getSpecialBullet(_p1->getQtdSpecialFire())->get_h_sz()/2));
+        //            _p1->getSpecialBullet(_p1->getQtdSpecialFire())->setX(_p1->getX()-_p1->getSpecialBullet(_p1->getQtdSpecialFire())->get_w_sz()-5);
+        //            _p1->getSpecialBullet(_p1->getQtdSpecialFire())->setDirection('l');
+        //        }
+
+        //        if(_p1->getQtdSpecialFire()>=0 && tecla_b != NULL){
+        //            _p1->getSpecialBullet(_p1->getQtdSpecialFire())->setActive(true);
+        //            if(_p1->getSpecialBullet(_p1->getQtdSpecialFire())->getFireSound()->state() == QMediaPlayer::PlayingState ){
+        //                _p1->getSpecialBullet(_p1->getQtdSpecialFire())->getFireSound()->setPosition(0);
+        //            }else if (_p1->getSpecialBullet(_p1->getQtdSpecialFire())->getFireSound()->state() == QMediaPlayer::StoppedState){
+        //                _p1->getSpecialBullet(_p1->getQtdSpecialFire())->getFireSound()->play();
+        //            }
+        //        }
+        break;
+    case Qt::Key_I:
+        int index2;
+        if(_p2->getQtdSpecialFire()>0){
+            for(int i=0;i<_p2->getMunicao().size();i++){
+                if(!(_p2->getBullet(i)->getActive())){
+                    if(_p2->getBullet(i)->getColor() == Qt::red || _p2->getBullet(i)->getColor() == Qt::blue){
+                        index2 = i;
+                    }
+                }
+            }
+
+            if(tecla_p == Qt::Key_W){
+                _p2->getBullet(index2)->setX(_p2->getX()+(_p2->getW_size()/2)-( _p2->getBullet(index2)->get_h_sz()/2));
+                _p2->getBullet(index2)->setY(_p2->getY()- _p2->getBullet(index2)->get_h_sz()-5);
+                _p2->getBullet(index2)->setDirection('u');
+            }
+            if(tecla_p == Qt::Key_S){
+                _p2->getBullet(index2)->setX(_p2->getX()+(_p2->getW_size()/2)-( _p2->getBullet(index2)->get_h_sz()/2));
+                _p2->getBullet(index2)->setY(_p2->getY()+_p2->getH_size()+5);
+                _p2->getBullet(index2)->setDirection('d');
+            }
+            if(tecla_p == Qt::Key_D){
+                _p2->getBullet(index2)->setY(_p2->getY()+(_p2->getH_size())/2-( _p2->getBullet(index2)->get_h_sz()/2));
+                _p2->getBullet(index2)->setX(_p2->getX()+_p2->getW_size()+5);
+                _p2->getBullet(index2)->setDirection('r');
+            }
+            if(tecla_p == Qt::Key_A){
+                _p2->getBullet(index2)->setY(_p2->getY()+(_p2->getH_size())/2-( _p2->getBullet(index2)->get_h_sz()/2));
+                _p2->getBullet(index2)->setX(_p2->getX()- _p2->getBullet(index2)->get_w_sz()-5);
+                _p2->getBullet(index2)->setDirection('l');
+            }
+
+            _p2->getBullet(index2)->setSf_p(2);
+
+            if(tecla_p != NULL){
+                _p2->getBullet(index2)->setActive(true);
+                if( _p2->getBullet(index2)->getFireSound()->state() == QMediaPlayer::PlayingState ){
+                    _p2->getBullet(index2)->getFireSound()->setPosition(0);
+                }else if ( _p2->getBullet(index2)->getFireSound()->state() == QMediaPlayer::StoppedState){
+                    _p2->getBullet(index2)->getFireSound()->play();
+                }
+            }
+
+            _p2->removeSpecialFire();
+
+
+        }
+
+        break;
     case Qt::Key_U:
         if(_p2->getQtdFire()<4){
             // atualiza as Coordenadas do tiro
@@ -2246,7 +2559,6 @@ void Scenary::resizeEvent(QResizeEvent *event)
 
 }
 
-
 Missile *Scenary::getSpecial(int index)
 {
     //    if(_special->getActive(index)){
@@ -2257,27 +2569,28 @@ Missile *Scenary::getSpecial(int index)
 
 void Scenary::Colision_Missile_Scenary()
 {
-    if(_p1->getQtdFire()>=0){
+    if(_p1->getQtdFire()>=0 || _p1->getQtdSpecialFire()>=0){
         if(_p1->getActive()){
 
-            for(int i=0;i<5;i++){
+            for(int i=0;i<_p1->getMunicao().size();i++){
 
                 if(_p1->getBullet(i)->getActive()){
-
+                    //qDebug()<<i;
                     Colision_Missile_Scenary_white(_p1->getBullet(i));
-
+                    Colision_SB_Scenary_white(_p1->getBullet(i));
                 }
 
             }
         }
     }
-    if(_p2->getQtdFire()>=0){
+    if(_p2->getQtdFire()>=0 || _p1->getQtdSpecialFire()>=0){
         if(_p2->getActive()){
-            for(int i=0;i<5;i++){
+            for(int i=0;i<_p2->getMunicao().size();i++){
 
                 if(_p2->getBullet(i)->getActive()){
 
                     Colision_Missile_Scenary_black(_p2->getBullet(i));
+                    Colision_SB_Scenary_black(_p2->getBullet(i));
                 }
 
             }
@@ -2288,25 +2601,23 @@ void Scenary::Colision_Missile_Scenary()
 void Scenary::generateSpecialFire(QPainter &p)
 {
     if(_p1->getActive() && _p2->getActive()){
-        if(_cont_t == 150){
-
+        if(_cont_t == 500){
             if(_special.size()<5){
                 Missile *_fs = new Missile(this,Qt::blue);
-                _fs->setX(rand() % 799 + 0);
-                _fs->setY(rand() % 600 + 0);
-
+                _fs->setX(rand() % width()-50 + 50);
+                _fs->setY(rand() % height()-50 + 50);
                 _fs->setActive(true);
                 _special.push_back(_fs);
             }
 
         }
-        if(_cont_t == 300){
+        if(_cont_t == 850){
 
             //qDebug()<<_special.size();
             if(_special.size()<5){
                 Missile *_fs = new Missile(this,Qt::red);
-                _fs->setX(rand() % 600 + 0);
-                _fs->setY(rand() % 400 + 0);
+                _fs->setX(rand() % width()-100 + 100);
+                _fs->setY(rand() % height()-100 + 100);
 
                 _fs->setActive(true);
                 _special.push_back(_fs);

@@ -54,6 +54,7 @@ private:
     bool _active;
     int _Qtd_specialFire;
 
+
     //Missile *_bala;
     QVector <Missile*> _municao;
     QVector <Missile*> _municao_special;

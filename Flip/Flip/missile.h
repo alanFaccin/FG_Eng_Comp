@@ -28,6 +28,11 @@ public:
     int getQtdTiro();
     void addTiro();
     void resetTiro();
+    void setSf_p (int p);
+    int getSf_p ();
+    void setOwner();
+    bool isInPlayer();
+
 
 private slots:
     void move();
@@ -43,4 +48,6 @@ private:
     char _direction;
     bool _active;
     int _qtd_tiro;
+    int _sf_p;
+    bool _player;
 };

@@ -17,7 +17,10 @@ public:
     void define_Scenary(int type);
     int Colision_Player(Player *_p);
     int Colision_Missile_Scenary_white(Missile *_t);
+    int Colision_Missile_Missile();
     int Colision_Missile_Scenary_black(Missile *_t);
+    int Colision_SB_Scenary_white(Missile *_t);
+    int Colision_SB_Scenary_black(Missile *_t);
     int Colision_cenario();
     void colision_Special_bullet();
     void movePalyer();
